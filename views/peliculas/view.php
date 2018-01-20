@@ -1,12 +1,13 @@
 <?php
 
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use yii\data\ActiveDataProvider;
 /* @var $this yii\web\View */
 /* @var $model app\models\Peliculas */
 
-$this->title = $model->id;
+$this->title = $model->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Peliculas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -33,6 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'titulo',
             'precio_alq',
         ],
+    ]) ?>
+
+    <h3>Últimos socios que la han alquilado</h3>
+    <?= GridView::widget([
+        'dataProvider'=> new ActiveDataProvider([
+            'query'=> $socios,
+            'pagination'=>false,
+            'sort'=>false
+        ]),
+        'columns'=>[
+            'numero',
+            'nombre',
+            'direccion',
+            'telefono',
+        ]
     ]) ?>
 
 </div>
