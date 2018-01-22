@@ -23,6 +23,7 @@ $this->title = 'VideoGuay';
 
      ?>
      <div class="col-md-offset-3 col-md-6">
+         <h3>últimas peliculas</h3>
          <table class='table'>
              <thead>
                  <th>Código</th>

@@ -54,6 +54,7 @@ class SociosController extends Controller
     public function actionView($id)
     {
         $a = Alquileres::find()
+            ->with('pelicula')
             ->where(['socio_id' => $id])
             ->orderBy('create_at DESC')
             ->limit(10);

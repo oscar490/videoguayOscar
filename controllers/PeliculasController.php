@@ -60,6 +60,7 @@ class PeliculasController extends Controller
         //     ->limit(10);
 
         $alquileres = Alquileres::find()
+            ->with('socio') //  Nombre de relacion.
             ->where(['pelicula_id' => $id])
             ->orderBy(['create_at' => SORT_DESC])
             ->limit(10)

@@ -37,13 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h3>Últimos alquileres de esta película</h3>
-    
+
 
     <table class='table'>
         <thead>
             <th>Número</th>
             <th>Nombre</th>
-            <th>Fecha alquileres</th>
+            <th>Fecha de alquileres</th>
         </thead>
         <tbody>
             <?php foreach ($alquileres as $alquiler): ?>
