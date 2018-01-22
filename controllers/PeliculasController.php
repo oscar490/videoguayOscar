@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Alquileres;
 use app\models\Peliculas;
 use app\models\PeliculasSearch;
 use app\models\Socios;
@@ -53,14 +54,20 @@ class PeliculasController extends Controller
      */
     public function actionView($id)
     {
-        $s = Socios::find()
-            ->joinWith('peliculas p')
-            ->where(['p.id' => $id])
-            ->limit(10);
+        // $s = Socios::find()
+        //     ->joinWith('peliculas p')
+        //     ->where(['p.id' => $id])
+        //     ->limit(10);
+
+        $alquileres = Alquileres::find()
+            ->where(['pelicula_id' => $id])
+            ->orderBy(['create_at' => SORT_DESC])
+            ->limit(10)
+            ->all();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'socios' => $s,
+            'alquileres' => $alquileres,
         ]);
     }
 

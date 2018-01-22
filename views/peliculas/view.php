@@ -36,19 +36,24 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <h3>Últimos socios que la han alquilado</h3>
-    <?= GridView::widget([
-        'dataProvider'=> new ActiveDataProvider([
-            'query'=> $socios,
-            'pagination'=>false,
-            'sort'=>false
-        ]),
-        'columns'=>[
-            'numero',
-            'nombre',
-            'direccion',
-            'telefono',
-        ]
-    ]) ?>
+    <h3>Últimos alquileres de esta película</h3>
+    
+
+    <table class='table'>
+        <thead>
+            <th>Número</th>
+            <th>Nombre</th>
+            <th>Fecha alquileres</th>
+        </thead>
+        <tbody>
+            <?php foreach ($alquileres as $alquiler): ?>
+                <tr>
+                    <td><?= Html::encode($alquiler->socio->numero)?></td>
+                    <td><?= Html::encode($alquiler->socio->nombre)?></td>
+                    <td><?= Html::encode($alquiler->create_at)?></td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
 
 </div>
