@@ -30,7 +30,29 @@ class PeliculasController extends Controller
             ],
         ];
     }
+    /**
+     * Alquila una pelicula.
+     * @return mixed
+     */
+    public function actionAlquilar()
+    {
+        $alquilarForm = new \app\models\AlquilarForm();
 
+        if ($alquilarForm->load(Yii::$app->request->post()) && $alquilarForm->validate()) {
+            $socio = Socios::findOne(['numero' => $alquilarForm->numero]);
+            $pelicula = Peliculas::findOne(['codigo' => $alquilarForm->codigo]);
+            $alquiler = new Alquileres([
+                'socio_id' => $socio->id,
+                'pelicula_id' => $pelicula->id,
+            ]);
+            $alquiler->save();
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('alquilar', [
+                'alquilarForm' => $alquilarForm,
+        ]);
+    }
     /**
      * Lists all Peliculas models.
      * @return mixed
