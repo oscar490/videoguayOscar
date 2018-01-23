@@ -35,8 +35,13 @@ class AlquilarForm extends Model
                     'exist',
                     'skipOnError' => true,
                     'targetClass' => Peliculas::className(),
-                    'targetAttribute' => ['numero' => 'numero'],
+                    'targetAttribute' => ['codigo' => 'codigo'],
                 ],
+                [['codigo'], function ($attribute, $params, $validator) {
+                    if (Peliculas::findOne(['codigo' => $this->codigo])->estaAlquilada) {
+                        $this->addError($attribute, 'La película ya está alquilada.');
+                    }
+                }],
         ];
     }
 }
