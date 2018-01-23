@@ -17,6 +17,12 @@ namespace app\models;
 class Alquileres extends \yii\db\ActiveRecord
 {
     /**
+     * Escenario usado cuando se crea una nueva instancia.
+     * @var [type]
+     */
+    public const ESCENARIO_CREAR = 'crear';
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -41,9 +47,7 @@ class Alquileres extends \yii\db\ActiveRecord
                 if (Peliculas::findOne(['codigo' => $this->pelicula_id])->estaAlquilada) {
                     $this->addError($attribute, 'La película ya está alquilada.');
                 }
-            }, 'when' => function ($model, $attribute) {
-                return $model->id === null;
-            }],
+            }, 'on' => self::ESCENARIO_CREAR],
         ];
     }
 

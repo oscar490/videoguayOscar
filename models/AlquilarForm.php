@@ -39,7 +39,7 @@ class AlquilarForm extends Model
                 ],
                 [['codigo'], function ($attribute, $params, $validator) {
                     if (Peliculas::findOne(['codigo' => $this->codigo])->estaAlquilada) {
-                        $this->addError($attribute, 'La película ya está alquilada.');
+                        $this->addError($attribute, 'La película ya está alquilada');
                     }
                 }],
         ];
