@@ -37,9 +37,13 @@ class Alquileres extends \yii\db\ActiveRecord
             [['socio_id', 'pelicula_id', 'create_at'], 'unique', 'targetAttribute' => ['socio_id', 'pelicula_id', 'create_at']],
             [['pelicula_id'], 'exist', 'skipOnError' => true, 'targetClass' => Peliculas::className(), 'targetAttribute' => ['pelicula_id' => 'id']],
             [['socio_id'], 'exist', 'skipOnError' => true, 'targetClass' => Socios::className(), 'targetAttribute' => ['socio_id' => 'id']],
-            // [['pelicula_id'], function ($attribute, $params, $validator) {
-            //     $this->addError($attribute, 'Horror');
-            // }],
+            [['pelicula_id'], function ($attribute, $params, $validator) {
+                if (Peliculas::findOne(['codigo' => $this->pelicula_id])->estaAlquilada) {
+                    $this->addError($attribute, 'La película ya está alquilada.');
+                }
+            }, 'when' => function ($model, $attribute) {
+                return $model->id === null;
+            }],
         ];
     }
 
