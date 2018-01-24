@@ -23,6 +23,9 @@ use yii\widgets\ActiveForm;
         <?php if (isset($socio)): ?>
             <h3><?= Html::encode($socio->nombre)?></h3>
             <h3><?= Html::encode($socio->telefono)?></h3>
+            <?php foreach ($socio->pendientes as $alquiler): ?>
+                
+            <?php endforeach ?>
         <?php endif ?>
     </div>
 </div>
