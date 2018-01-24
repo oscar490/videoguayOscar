@@ -22,7 +22,7 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -40,11 +40,13 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Inicio', 'url' => ['/site/index']],
+            ['label' => 'Gestionar', 'url' => ['alquileres/gestionar']],
             ['label'=> 'Socios', 'url' => ['/socios/index']],
             ['label'=> 'Películas', 'url' => ['/peliculas/index']],
             ['label'=> 'Alquileres', 'url' => ['/alquileres/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
+
 
             Yii::$app->user->isGuest ? (
                 ['label' => 'Iniciar sesión', 'url' => ['/site/login']]

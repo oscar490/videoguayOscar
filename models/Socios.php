@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use yii;
+
 /**
  * This is the model class for table "socios".
  *
@@ -34,6 +36,17 @@ class Socios extends \yii\db\ActiveRecord
             [['nombre', 'direccion'], 'string', 'max' => 255],
             [['numero'], 'unique'],
         ];
+    }
+
+    /**
+     * [getPendientes description].
+     * @return yii\db\ActiveQuery
+     */
+    public function getPendientes()
+    {
+        return $this->getAlquileres()
+            ->where(['devolucion' => null])
+            ->orderBy(['create_at' => SORT_DESC]);
     }
 
     /**
