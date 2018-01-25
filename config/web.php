@@ -15,6 +15,9 @@ $config = [
     ],
     'language' => 'es-ES',
     'components' => [
+        'formatter' => [
+            'timeZone' => 'Europe/Madrid',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'lt4VIsdtcHs3NGMNyugo1vFFazD_A9EX',
