@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
 use app\models\GestionarForm;
+use app\models\Peliculas;
 use app\models\Socios;
 use Yii;
 use yii\filters\VerbFilter;
@@ -36,8 +37,9 @@ class AlquileresController extends Controller
      * Alquila y devuelve películas en una sola acción.
      * @return mixed
      * @param null|mixed $numero
+     * @param null|mixed $codigo
      */
-    public function actionGestionar($numero = null)
+    public function actionGestionar($numero = null, $codigo = null)
     {
         $model = new GestionarForm([
             'numero' => $numero,
@@ -45,9 +47,15 @@ class AlquileresController extends Controller
 
         $data = [];
 
-        if ($numero != null && $model->validate()) {
-            $socio = Socios::findOne(['numero' => $model->numero]);
-            $data['socio'] = $socio;
+        if ($numero !== null && $model->validate()) {
+            $data['socio'] = Socios::findOne(['numero' => $numero]);
+            $model->codigo = $codigo;
+
+            if ($model->validate()) {
+                $data['pelicula'] = $pelicula = Peliculas::findOne([
+                    'codigo' => $model->codigo,
+                ]);
+            }
         }
 
         $data['model'] = $model;
@@ -106,6 +114,13 @@ class AlquileresController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+    /**
+     * Alquila una película dados 'socio_id' y 'pelicula_id'.
+     * @return [type] [description]
+     */
+    public function actionAlquilar()
+    {
     }
 
     /**
