@@ -6,6 +6,7 @@ use app\models\Alquileres;
 use app\models\Socios;
 use app\models\SociosSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -53,15 +54,20 @@ class SociosController extends Controller
      */
     public function actionView($id)
     {
-        $a = Alquileres::find()
-            ->with('pelicula')
-            ->where(['socio_id' => $id])
-            ->orderBy('create_at DESC')
+        $alquileres = Alquileres::find()
+            ->where(['socio_id'=>$id])
+            ->orderBy(['create_at'=>SORT_DESC])
             ->limit(10);
+
+        $dataprovider = new ActiveDataProvider([
+            'query' => $alquileres,
+            'pagination' => false,
+            'sort'=> false,
+        ]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'alquileres' => $a,
+            'dataprovider' => $dataprovider,
         ]);
     }
 

@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Añadir un película', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Alquilar película', ['alquilar'], ['class' => 'btn btn-info']) ?>
-        
+        <?= Html::a('Alquilar película', ['peliculas/alquilar'], ['class' => 'btn btn-info']) ?>
+
     </p>
 
     <?= GridView::widget([
