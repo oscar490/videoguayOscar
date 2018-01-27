@@ -39,19 +39,17 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 
-    <h3>Últimas películas alquiladas</h3>
+    <h3>Últimos alquileres</h3>
 
     <?= GridView::widget([
-        'dataProvider' => new ActiveDataProvider([
-            'query'=>$alquileres,
-            'pagination'=>false,
-            'sort'=>false
-        ]),
+        'dataProvider' => $dataprovider,
         'columns'=> [
             'pelicula.codigo',
             'pelicula.titulo',
-            'create_at',
-        ]
+            'create_at:datetime',
+        ],
     ]) ?>
+
+
 
 </div>

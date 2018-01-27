@@ -54,8 +54,8 @@ class Peliculas extends \yii\db\ActiveRecord
     public function getEstaAlquilada()
     {
         return $this->getAlquileres()
-                ->where(['devolucion' => null])
-                ->exists();
+            ->where(['devolucion' => null])
+            ->exists();
     }
     /**
      * @return \yii\db\ActiveQuery

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\AlquilarPeliculaForm;
 use app\models\Alquileres;
 use app\models\Peliculas;
 use app\models\PeliculasSearch;
@@ -36,22 +37,20 @@ class PeliculasController extends Controller
      */
     public function actionAlquilar()
     {
-        $alquilarForm = new \app\models\AlquilarForm();
+        $modelo = new AlquilarPeliculaForm();
 
-        if ($alquilarForm->load(Yii::$app->request->post()) && $alquilarForm->validate()) {
-            $socio = Socios::findOne(['numero' => $alquilarForm->numero]);
-            $pelicula = Peliculas::findOne(['codigo' => $alquilarForm->codigo]);
-            $alquiler = new Alquileres([
-                'socio_id' => $socio->id,
-                'pelicula_id' => $pelicula->id,
-                'scenario' => Alquileres::ESCENARIO_CREAR,
-            ]);
+        if ($modelo->load(Yii::$app->request->post()) && $modelo->validate()) {
+            $alquiler = new Alquileres();
+            $socio = Socios::findOne(['numero' => $modelo->numero]);
+            $pelicula = Peliculas::findOne(['codigo' => $modelo->codigo]);
+            $alquiler->socio_id = $socio->id;
+            $alquiler->pelicula_id = $pelicula->id;
             $alquiler->save();
-            return $this->redirect(['index']);
+            $this->redirect(['peliculas/index']);
         }
 
         return $this->render('alquilar', [
-                'alquilarForm' => $alquilarForm,
+            'modelo' => $modelo,
         ]);
     }
     /**

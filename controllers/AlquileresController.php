@@ -5,8 +5,6 @@ namespace app\controllers;
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
 use app\models\GestionarForm;
-use app\models\Peliculas;
-use app\models\Socios;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -41,26 +39,14 @@ class AlquileresController extends Controller
      */
     public function actionGestionar($numero = null, $codigo = null)
     {
-        $model = new GestionarForm([
+        $modelo = new GestionarForm([
             'numero' => $numero,
         ]);
 
-        $data = [];
 
-        if ($numero !== null && $model->validate()) {
-            $data['socio'] = Socios::findOne(['numero' => $numero]);
-            $model->codigo = $codigo;
-
-            if ($model->validate()) {
-                $data['pelicula'] = $pelicula = Peliculas::findOne([
-                    'codigo' => $model->codigo,
-                ]);
-            }
-        }
-
-        $data['model'] = $model;
-
-        return $this->render('gestionar', $data);
+        return $this->render('gestionar', [
+            'modelo' => $modelo,
+        ]);
     }
     /**
      * Devuelve un alquiler indicado por el id pasado por post.
