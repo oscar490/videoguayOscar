@@ -60,7 +60,7 @@ class Alquileres extends \yii\db\ActiveRecord
             'id' => 'ID',
             'socio_id' => 'Socio ID',
             'pelicula_id' => 'Pelicula ID',
-            'create_at' => 'Fecha de alquiler',
+            'create_at::dateTime' => 'Fecha de alquiler',
             'devolucion' => 'Devolucion',
         ];
     }

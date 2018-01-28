@@ -2,14 +2,17 @@
 
 namespace app\controllers;
 
+use app\models\Peliculas;
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
-use app\models\GestionarForm;
+use app\models\GestionarSociosForm;
 use Yii;
+use app\models\GestionarPeliculasForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use app\models\Socios;
 
 /**
  * AlquileresController implements the CRUD actions for Alquileres model.
@@ -39,14 +42,35 @@ class AlquileresController extends Controller
      */
     public function actionGestionar($numero = null, $codigo = null)
     {
-        $modelo = new GestionarForm([
+        $modeloSocios = new GestionarSociosForm([
             'numero' => $numero,
         ]);
 
-
-        return $this->render('gestionar', [
-            'modelo' => $modelo,
+        $modeloPeliculas = new GestionarPeliculasForm([
+            'codigo' => $codigo,
         ]);
+
+        $datos = [];
+
+        if ($numero !== null && $modeloSocios->validate()) {
+            $datos['socio'] = Socios::findOne(['numero'=>$numero]);
+            $datos['alquileres'] = $datos['socio']->getAlquileres()
+                ->where(['devolucion'=>null])
+                ->orderBy(['create_at'=>SORT_DESC])
+                ->limit(5)
+                ->all();
+
+            if ($codigo !== null && $modeloPeliculas->validate()) {
+                $datos['pelicula'] = Peliculas::findOne(['codigo'=>$modeloPeliculas->codigo]);
+            }
+        }
+
+        $datos['modeloSocios'] = $modeloSocios;
+        $datos['modeloPeliculas'] = $modeloPeliculas;
+
+        return $this->render('gestionar', $datos);
+            // 'alquileres'=>$alquileres,
+
     }
     /**
      * Devuelve un alquiler indicado por el id pasado por post.
@@ -56,23 +80,8 @@ class AlquileresController extends Controller
      */
     public function actionDevolver($numero)
     {
-        $id = Yii::$app->request->post('id');
 
-        if ($id === null) {
-            throw new NotFoundHttpException('Falta el alquiler.');
-        }
 
-        if (($alquiler = Alquileres::findOne($id)) === null) {
-            throw new NotFoundHttpException('El alquiler no existe.');
-        }
-
-        $alquiler->devolucion = date('Y-m-d H:i:s');
-        $alquiler->save();
-
-        return $this->redirect([
-            'alquileres/gestionar',
-            'numero' => $numero,
-        ]);
     }
     /**
      * Lists all Alquileres models.
