@@ -8,9 +8,11 @@ use app\models\Peliculas;
 use app\models\PeliculasSearch;
 use app\models\Socios;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\data\Sort;
 
 /**
  * PeliculasController implements the CRUD actions for Peliculas model.
@@ -30,6 +32,37 @@ class PeliculasController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * Muestra un listado paginado de películas
+     * @return mixed
+     */
+    public function actionListado()
+    {
+        $peliculas = Peliculas::find();
+        $pagination = new Pagination([
+            'totalCount'=>$peliculas->count(),
+            'pageSize' => 20, // 20 por defecto
+        ]);
+        $sort = new Sort([
+            'attributes'=> [
+                'codigo'=>['label'=>'Código'],
+                'titulo'=>['label'=>'Título', 'default'],
+                'precio_alq'=>['label'=>'Precio de alquiler'],
+            ]
+        ]);
+        $peliculas = $peliculas
+            ->orderBy($sort->orders)
+            ->limit($pagination->limit)
+            ->offset($pagination->offset)
+            ->all();
+
+        return $this->render('listado', [
+            'peliculas'=>$peliculas,
+            'pagination'=>$pagination,
+            'sort'=>$sort,
+        ]);
     }
     /**
      * Alquila una pelicula.

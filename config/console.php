@@ -18,6 +18,9 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'formatter'=> [
+            'dateFormat'=>'dd-MM-yyyy',
+        ],
         'log' => $log,
         'db' => $db,
     ],
@@ -25,7 +28,7 @@ $config = [
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
-            'language' => 'es_ES',
+            'language' => 'es-ES',
         ],
     ],
 ];
