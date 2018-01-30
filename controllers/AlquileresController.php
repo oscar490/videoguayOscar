@@ -78,19 +78,12 @@ class AlquileresController extends Controller
      */
     public function actionDevolver($numero)
     {
+
         $id = Yii::$app->request->post('id');
 
-        if ($id === null) {
-            throw new NotFoundHttpException('Falta el alquiler.');
-        }
-
-        if (($alquiler = Alquileres::findOne($id)) === null) {
-            throw new NotFoundHttpException('El alquiler no existe.');
-        }
-
+        $alquiler = Alquileres::findOne($id);
         $alquiler->devolucion = date('Y-m-d H:i:s');
         $alquiler->save();
-
         return $this->redirect([
             'alquileres/gestionar',
             'numero' => $numero,

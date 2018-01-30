@@ -41,14 +41,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3>Últimos alquileres</h3>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataprovider,
-        'columns'=> [
-            'pelicula.codigo',
-            'pelicula.titulo',
-            'create_at:datetime',
-        ],
-    ]) ?>
+    <table class='table'>
+        <thead>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Fecha de alquiler</th>
+            <th>Acción</th>
+        </thead>
+        <tbody>
+            <?php foreach ($alquileres as $alquiler): ?>
+                <tr>
+                    <td><?= $alquiler->pelicula->codigo ?></td>
+                    <td><?= $alquiler->pelicula->titulo ?></td>
+                    <td><?= $alquiler->create_at ?></td>
+                    <td>
+                        <?= Html::beginForm(['alquileres/devolver', 'numero'=>$model->numero]) ?>
+                            <?= Html::hiddenInput('id', $alquiler->id) ?>
+                            <?= Html::submitButton('Devolver', ['class'=>'btn-xs btn-danger']) ?>
+                        <?= Html::endForm() ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
 
 
 

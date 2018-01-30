@@ -55,9 +55,10 @@ class SociosController extends Controller
     public function actionView($id)
     {
         $alquileres = Alquileres::find()
-            ->where(['socio_id'=>$id])
+            ->where(['devolucion'=>null,'socio_id'=>$id])
             ->orderBy(['create_at'=>SORT_DESC])
-            ->limit(10);
+            ->limit(10)
+            ->all();
 
         $dataprovider = new ActiveDataProvider([
             'query' => $alquileres,
@@ -67,7 +68,7 @@ class SociosController extends Controller
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'dataprovider' => $dataprovider,
+            'alquileres'=>$alquileres,
         ]);
     }
 
