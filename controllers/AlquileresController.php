@@ -58,7 +58,7 @@ class AlquileresController extends Controller
             $data['alquileres'] = $data['socio']->getAlquileres()
                 ->where(['devolucion'=>null])->all();
 
-            if ($modeloPeliculas->validate()) {
+            if ($codigo != null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
                     'codigo' => $modeloPeliculas->codigo,
                 ]);

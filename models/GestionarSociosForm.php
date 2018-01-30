@@ -7,6 +7,7 @@ use yii\base\Model;
 class GestionarSociosForm extends Model
 {
     public $numero;
+    public $nombre;
 
     public function formName()
     {
@@ -26,6 +27,15 @@ class GestionarSociosForm extends Model
                 'targetClass'=>Socios::className(),
                 'targetAttribute'=>['numero'=>'numero'],
                 'message'=>'No existe el socio',
+            ],
+            [
+                ['nombre'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass'=>Socios::className(),
+                'targetAttribute'=>['nombre'=>'nombre'],
+                'message'=>'No existe el socio',
+
             ]
         ];
     }
