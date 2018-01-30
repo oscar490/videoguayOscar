@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class='form-group'>
             <?= Html::submitButton('Buscar película', ['class'=>'btn btn-primary']) ?>
         </div>
+        <?php ActiveForm::end() ?>
 
         <?php if (isset($pelicula)): ?>
 
@@ -64,11 +65,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <h4><?= Yii::$app->formatter->asCurrency($pelicula->precio_alq) ?></h4>
             <?php if ($pelicula->estaAlquilada): ?>
                 <h4>Está alquilada</h4>
+            <?php else: ?>
+                <?= Html::beginForm([
+                    'alquileres/alquilar',
+                ]) ?>
+                    <?= Html::hiddenInput('pelicula_id', $pelicula->id) ?>
+                    <?= Html::hiddenInput('socio_id', $socio->id) ?>
+                    <?= Html::submitButton('Alquilar', ['class'=>'btn btn-primary']) ?>
+                <?= Html::endForm() ?>
             <?php endif ?>
         <?php endif ?>
 
 
 
 
-    <?php ActiveForm::end() ?>
+
 <?php endif?>

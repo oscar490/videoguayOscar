@@ -8,7 +8,8 @@ use app\models\GestionarForm;
 use app\models\Peliculas;
 use app\models\Socios;
 use Yii;
-use http\Env\Response;
+use app\models\GestionarSociosForm;
+use app\models\GestionarPeliculasForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -42,24 +43,30 @@ class AlquileresController extends Controller
      */
     public function actionGestionar($numero = null, $codigo = null)
     {
-        $model = new GestionarForm([
+        $modeloSocios = new GestionarSociosForm([
             'numero' => $numero,
+        ]);
+
+        $modeloPeliculas = new GestionarPeliculasForm([
+            'codigo' => $codigo,
         ]);
 
         $data = [];
 
-        if ($numero !== null && $model->validate()) {
+        if ($numero !== null && $modeloSocios->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $numero]);
-            $model->codigo = $codigo;
+            $data['alquileres'] = $data['socio']->getAlquileres()
+                ->where(['devolucion'=>null])->all();
 
-            if ($model->validate()) {
-                $data['pelicula'] = $pelicula = Peliculas::findOne([
-                    'codigo' => $model->codigo,
+            if ($modeloPeliculas->validate()) {
+                $data['pelicula'] = Peliculas::findOne([
+                    'codigo' => $modeloPeliculas->codigo,
                 ]);
             }
         }
 
-        $data['model'] = $model;
+        $data['modeloSocios'] = $modeloSocios;
+        $data['modeloPeliculas'] = $modeloPeliculas;
 
         return $this->render('gestionar', $data);
     }
@@ -89,6 +96,8 @@ class AlquileresController extends Controller
             'numero' => $numero,
         ]);
     }
+
+
     /**
      * Lists all Alquileres models.
      * @return mixed
@@ -122,9 +131,19 @@ class AlquileresController extends Controller
      * @return Response LA redirección
      * @throws NotFoundHttpException [description]
      */
-    public function actionAlquilar($numero)
+    public function actionAlquilar()
     {
 
+        $socio_id = Yii::$app->request->post('socio_id');
+        $pelicula_id = Yii::$app->request->post('pelicula_id');
+        $alquiler = new Alquileres([
+            'socio_id'=>$socio_id,
+            'pelicula_id'=>$pelicula_id,
+        ]);
+
+        $alquiler->save();
+
+        $this->redirect(['alquileres/gestionar']);
     }
 
     /**

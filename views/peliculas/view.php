@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tr>
                     <td><?= Html::encode($alquiler->socio->numero)?></td>
                     <td><?= Html::encode($alquiler->socio->nombre)?></td>
-                    <td><?= Html::encode($alquiler->create_at)?></td>
+                    <td><?= Yii::$app->formatter->asDatetime($alquiler->create_at)?></td>
                 </tr>
             <?php endforeach ?>
         </tbody>
