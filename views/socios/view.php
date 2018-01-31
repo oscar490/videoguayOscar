@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php foreach ($alquileres as $alquiler): ?>
                     <tr>
                         <td><?= $alquiler->pelicula->codigo ?></td>
-                        <td><?= $alquiler->pelicula->titulo ?></td>
-                        <td><?= $alquiler->create_at ?></td>
+                        <td><?= Html::a($alquiler->pelicula->titulo, ['peliculas/view', 'id'=>$alquiler->pelicula->id]) ?></td>
+                        <td><?=Yii::$app->formatter->asDatetime($alquiler->create_at )?></td>
                         <td>
                             <?= Html::beginForm(['alquileres/devolver', 'numero'=>$model->numero]) ?>
                                 <?= Html::hiddenInput('id', $alquiler->id) ?>

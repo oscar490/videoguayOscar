@@ -11,6 +11,7 @@ use Yii;
 use app\models\GestionarSociosForm;
 use app\models\GestionarPeliculasForm;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -65,6 +66,11 @@ class AlquileresController extends Controller
             }
         }
 
+        Yii::$app->session->set(
+            'rutaVuelta',
+            Url::to(['alquileres/gestionar', 'numero'=>$numero])
+        );
+
         $data['modeloSocios'] = $modeloSocios;
         $data['modeloPeliculas'] = $modeloPeliculas;
 
@@ -84,10 +90,14 @@ class AlquileresController extends Controller
         $alquiler = Alquileres::findOne($id);
         $alquiler->devolucion = date('Y-m-d H:i:s');
         $alquiler->save();
-        return $this->redirect([
-            'alquileres/gestionar',
-            'numero' => $numero,
-        ]);
+
+        $url = Yii::$app->session->get(
+            'rutaVuelta',
+            ['alquileres/gestionar', 'numero'=>$numero]
+        );
+
+        Yii::$app->session->remove('rutaVuelta');
+        return $this->redirect($url);
     }
 
 
@@ -133,10 +143,17 @@ class AlquileresController extends Controller
             'socio_id'=>$socio_id,
             'pelicula_id'=>$pelicula_id,
         ]);
-
+        Yii::$app->session->set('mensaje', 'Se ha realizado el alquiler correctamente');
         $alquiler->save();
 
-        $this->redirect(['alquileres/gestionar']);
+        $url = Yii::$app->session->get(
+            'rutaVuelta',
+            ['alquileres/gestionar', 'numero'=>$alquiler->socio->numero]
+        );
+
+        Yii::$app->session->remove('rutaVuelta');
+
+        $this->redirect($url);
     }
 
     /**

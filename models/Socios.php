@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "socios".
@@ -75,5 +76,10 @@ class Socios extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Peliculas::className(), ['id' => 'pelicula_id'])
             ->via('alquileres');
+    }
+
+    public function getEnlace()
+    {
+        return Html::a(Html::encode($this->nombre), ['socios/view', 'id'=>$this->id]);
     }
 }

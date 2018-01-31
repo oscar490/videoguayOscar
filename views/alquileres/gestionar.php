@@ -1,9 +1,15 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-$this->title = 'Gestionar películas';
+$this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php if (Yii::$app->session->get('mensaje') !== null): ?>
+    <div class='alert alert-success'>
+        <?= Yii::$app->session->get('mensaje') ?>
+        <?php Yii::$app->session->remove('mensaje') ?>
+    </div>
+<?php endif ?>
 <h1><?= $this->title ?></h1>
 <?php $form = ActiveForm::begin([
     'method'=>'get',
@@ -20,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php if (isset($socio)): ?>
 
-
+    <h3><?= $socio->enlace ?></h3>
     <?php if (!empty($alquileres)): ?>
-        <h3>Alquileres pendientes de <?= $socio->nombre ?></h3>
+        <h3>Alquileres pendientes</h3>
         <table class='table'>
             <thead>
                 <td>Código</td>
@@ -34,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php foreach ($alquileres as $alquiler): ?>
                     <tr>
                         <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                        <td><?= Html::encode($alquiler->pelicula->titulo) ?></td>
+                        <td><?= Html::a($alquiler->pelicula->titulo, ['peliculas/view', 'id'=>$alquiler->pelicula->id]) ?></td>
                         <td><?= Yii::$app->formatter->asDatetime($alquiler->create_at) ?></td>
                         <td>
                             <?= Html::beginForm(['alquileres/devolver','post', 'numero'=>$socio->numero]) ?>
@@ -66,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php if (isset($pelicula)): ?>
 
-            <h4><?= $pelicula->titulo ?></h4>
+            <h4><?= Html::a($pelicula->titulo, ['peliculas/view', 'id'=>$pelicula->id]) ?></h4>
             <h4><?= Yii::$app->formatter->asCurrency($pelicula->precio_alq) ?></h4>
             <?php if ($pelicula->estaAlquilada): ?>
                 <h4>está alquilada por
@@ -75,10 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ->one();
                     ?>
                     <?=
-                        Html::a(
-                            $alquiler->socio->nombre,
-                            ['alquileres/gestionar', 'numero'=>$alquiler->socio->numero]
-                        );
+                        $alquiler->socio->enlace;
                     ?>
                 </h4>
 

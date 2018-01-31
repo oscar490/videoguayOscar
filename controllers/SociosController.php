@@ -8,6 +8,7 @@ use app\models\SociosSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -59,6 +60,11 @@ class SociosController extends Controller
             ->orderBy(['create_at'=>SORT_DESC])
             ->limit(10)
             ->all();
+
+        Yii::$app->session->set(
+            'rutaVuelta',
+            Url::to(['socios/view', 'id'=>$id])
+        );
 
         $dataprovider = new ActiveDataProvider([
             'query' => $alquileres,
