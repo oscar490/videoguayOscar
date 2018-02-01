@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\base\Model;
+use app\models\Socios;
 
 class GestionarSociosForm extends Model
 {
@@ -18,8 +19,23 @@ class GestionarSociosForm extends Model
     {
         return [
             [['numero'], 'required' ],
-            [['numero'], 'integer'],
+
             [['numero'], 'default'],
+            [['numero'], 'filter', 'filter' =>function ($value) {
+                if (!ctype_digit($value)) {
+                    $socio = Socios::find()
+                    ->where([
+                    'like',
+                    'lower(nombre)',
+                     mb_strtolower($value)
+                     ])->one();
+                    if ($socio !== null) {
+                         $value = $socio->numero;
+                    }
+                }
+                return $value;
+            }],
+            [['numero'], 'integer', 'enableClientValidation'=>false],
             [
                 ['numero'],
                 'exist',
@@ -28,15 +44,7 @@ class GestionarSociosForm extends Model
                 'targetAttribute'=>['numero'=>'numero'],
                 'message'=>'No existe el socio',
             ],
-            [
-                ['nombre'],
-                'exist',
-                'skipOnError' => true,
-                'targetClass'=>Socios::className(),
-                'targetAttribute'=>['nombre'=>'nombre'],
-                'message'=>'No existe el socio',
-
-            ]
+                
         ];
     }
 

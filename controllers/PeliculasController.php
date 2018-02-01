@@ -9,6 +9,7 @@ use app\models\PeliculasSearch;
 use app\models\Socios;
 use Yii;
 use yii\data\Pagination;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -41,27 +42,25 @@ class PeliculasController extends Controller
     public function actionListado()
     {
         $peliculas = Peliculas::find();
-        $pagination = new Pagination([
-            'totalCount'=>$peliculas->count(),
-            'pageSize' => 20, // 20 por defecto
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $peliculas,
+            'pagination' => [
+                'totalCount'=>$peliculas->count(),
+                'pageSize' => 2, // 20 por defecto
+            ],
+            'sort' => [
+                'attributes'=> [
+                    'codigo'=>['label'=>'Código'],
+                    'titulo'=>['label'=>'Título', 'default'],
+                    'precio_alq'=>['label'=>'Precio de alquiler'],
+                ]
+            ],
         ]);
-        $sort = new Sort([
-            'attributes'=> [
-                'codigo'=>['label'=>'Código'],
-                'titulo'=>['label'=>'Título', 'default'],
-                'precio_alq'=>['label'=>'Precio de alquiler'],
-            ]
-        ]);
-        $peliculas = $peliculas
-            ->orderBy($sort->orders)
-            ->limit($pagination->limit)
-            ->offset($pagination->offset)
-            ->all();
+
 
         return $this->render('listado', [
-            'peliculas'=>$peliculas,
-            'pagination'=>$pagination,
-            'sort'=>$sort,
+            'dataProvider' => $dataProvider,
         ]);
     }
     /**

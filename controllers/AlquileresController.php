@@ -55,7 +55,7 @@ class AlquileresController extends Controller
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
-            $data['socio'] = Socios::findOne(['numero' => $numero]);
+            $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
             $data['alquileres'] = $data['socio']->getAlquileres()
                 ->where(['devolucion'=>null])->all();
 
