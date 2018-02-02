@@ -8,12 +8,12 @@ use app\models\Peliculas;
 use app\models\PeliculasSearch;
 use app\models\Socios;
 use Yii;
-use yii\data\Pagination;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
+use yii\data\Sort;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\data\Sort;
 
 /**
  * PeliculasController implements the CRUD actions for Peliculas model.
@@ -36,7 +36,7 @@ class PeliculasController extends Controller
     }
 
     /**
-     * Muestra un listado paginado de películas
+     * Muestra un listado paginado de películas.
      * @return mixed
      */
     public function actionListado()
@@ -46,15 +46,15 @@ class PeliculasController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $peliculas,
             'pagination' => [
-                'totalCount'=>$peliculas->count(),
+                'totalCount' => $peliculas->count(),
                 'pageSize' => 2, // 20 por defecto
             ],
             'sort' => [
-                'attributes'=> [
-                    'codigo'=>['label'=>'Código'],
-                    'titulo'=>['label'=>'Título', 'default'],
-                    'precio_alq'=>['label'=>'Precio de alquiler'],
-                ]
+                'attributes' => [
+                    'codigo' => ['label' => 'Código'],
+                    'titulo' => ['label' => 'Título', 'default'],
+                    'precio_alq' => ['label' => 'Precio de alquiler'],
+                ],
             ],
         ]);
 
