@@ -4,12 +4,12 @@ namespace app\controllers;
 
 use app\models\Alquileres;
 use app\models\AlquileresSearch;
-use app\models\GestionarForm;
+use app\models\GestionarPeliculasForm;
+use app\models\GestionarSociosForm;
 use app\models\Peliculas;
 use app\models\Socios;
 use Yii;
-use app\models\GestionarSociosForm;
-use app\models\GestionarPeliculasForm;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -57,7 +57,7 @@ class AlquileresController extends Controller
         if ($numero !== null && $modeloSocios->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
             $data['alquileres'] = $data['socio']->getAlquileres()
-                ->where(['devolucion'=>null])->all();
+                ->where(['devolucion' => null])->all();
 
             if ($codigo != null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
@@ -68,7 +68,7 @@ class AlquileresController extends Controller
 
         Yii::$app->session->set(
             'rutaVuelta',
-            Url::to(['alquileres/gestionar', 'numero'=>$numero])
+            Url::to(['alquileres/gestionar', 'numero' => $numero])
         );
 
         $data['modeloSocios'] = $modeloSocios;
@@ -84,7 +84,6 @@ class AlquileresController extends Controller
      */
     public function actionDevolver($numero)
     {
-
         $id = Yii::$app->request->post('id');
 
         $alquiler = Alquileres::findOne($id);
@@ -93,7 +92,7 @@ class AlquileresController extends Controller
 
         $url = Yii::$app->session->get(
             'rutaVuelta',
-            ['alquileres/gestionar', 'numero'=>$numero]
+            ['alquileres/gestionar', 'numero' => $numero]
         );
 
         Yii::$app->session->remove('rutaVuelta');
@@ -116,6 +115,29 @@ class AlquileresController extends Controller
         ]);
     }
 
+    public function actionListado()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Alquileres::find()
+                ->joinWith(['socio', 'pelicula']),
+        ]);
+
+        $dataProvider->sort->attributes['socio.numero'] = [
+            'asc' => ['socios.numero' => SORT_ASC],
+            'desc' => ['socios.numero' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['pelicula.codigo'] = [
+            'asc' => ['peliculas.codigo' => SORT_ASC],
+            'desc' => ['peliculas.codigo' => SORT_DESC],
+        ];
+
+
+        return $this->render('listado', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Alquileres model.
      * @param int $id
@@ -130,25 +152,24 @@ class AlquileresController extends Controller
     }
     /**
      * Alquila una película dados 'socio_id' y 'pelicula_id
-     * pasados por POST
+     * pasados por POST.
      * @return Response LA redirección
      * @throws NotFoundHttpException [description]
      */
     public function actionAlquilar()
     {
-
         $socio_id = Yii::$app->request->post('socio_id');
         $pelicula_id = Yii::$app->request->post('pelicula_id');
         $alquiler = new Alquileres([
-            'socio_id'=>$socio_id,
-            'pelicula_id'=>$pelicula_id,
+            'socio_id' => $socio_id,
+            'pelicula_id' => $pelicula_id,
         ]);
         Yii::$app->session->set('mensaje', 'Se ha realizado el alquiler correctamente');
         $alquiler->save();
 
         $url = Yii::$app->session->get(
             'rutaVuelta',
-            ['alquileres/gestionar', 'numero'=>$alquiler->socio->numero]
+            ['alquileres/gestionar', 'numero' => $alquiler->socio->numero]
         );
 
         Yii::$app->session->remove('rutaVuelta');

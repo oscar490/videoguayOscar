@@ -28,9 +28,10 @@ use yii\grid\GridView;
         'titulo',
         [
             // 'class'=>DataColumn::className(), Por defecto.
-            'label'=>'Código + Título',
+            'attribute'=>'todo',
             'value'=>function($model, $key, $index, $column) {
-                    return $model->codigo . " " . $model->titulo;
+                    return $model->codigo . " " . $model->titulo . " "
+                        .  Yii::$app->formatter->asCurrency($model->precio_alq);
             },
             'format'=>'text',
         ],

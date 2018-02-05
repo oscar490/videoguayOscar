@@ -14,12 +14,18 @@ namespace app\models;
  */
 class Peliculas extends \yii\db\ActiveRecord
 {
+    public $todo;
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'peliculas';
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['todo']);
     }
 
     /**
@@ -45,6 +51,7 @@ class Peliculas extends \yii\db\ActiveRecord
             'codigo' => 'Código',
             'titulo' => 'Título',
             'precio_alq' => 'Precio de alquiler',
+            'todo' => 'Todo',
         ];
     }
     /**
