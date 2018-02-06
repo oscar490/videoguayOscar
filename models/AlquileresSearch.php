@@ -96,6 +96,8 @@ class AlquileresSearch extends Alquileres
             'desc' => ['peliculas.codigo' => SORT_DESC],
         ];
 
+        $dataProvider->sort->defaultOrder = ['create_at' => SORT_DESC];
+
 
 
         // grid filtering conditions
