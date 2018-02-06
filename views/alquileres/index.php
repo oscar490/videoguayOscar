@@ -23,8 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'id',
-            'socio_id',
+            'socio.numero',
+            'socio.nombre',
+            'pelicula.codigo',
             'pelicula.titulo',
 
             [

@@ -16,9 +16,29 @@ class AlquileresSearch extends Alquileres
     public function rules()
     {
         return [
-            [['id', 'socio_id', 'pelicula_id'], 'integer'],
-            [['create_at', 'devolucion'], 'safe'],
+            [['id', 'socio_id', 'pelicula_id', 'socio.numero', 'pelicula.codigo'], 'integer'],
+            [
+                [
+                    'create_at',
+                    'devolucion',
+                    'pelicula.titulo',
+                    'socio.numero',
+                    'socio.nombre',
+                    'pelicula.codigo',
+                ],
+                'safe',
+            ],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'pelicula.titulo',
+            'socio.numero',
+            'socio.nombre',
+            'pelicula.codigo',
+        ]);
     }
 
     /**
@@ -39,7 +59,7 @@ class AlquileresSearch extends Alquileres
      */
     public function search($params)
     {
-        $query = Alquileres::find()->joinWith('pelicula');
+        $query = Alquileres::find()->joinWith(['pelicula', 'socio']);
 
         // add conditions that should always apply here
 
@@ -61,14 +81,46 @@ class AlquileresSearch extends Alquileres
             'desc' => ['peliculas.titulo' => SORT_DESC],
         ];
 
+        $dataProvider->sort->attributes['socio.numero'] = [
+            'asc' => ['socios.numero' => SORT_ASC],
+            'desc' => ['socios.numero' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['socio.nombre'] = [
+            'asc' => ['socios.nombre' => SORT_ASC],
+            'desc' => ['socios.nombre' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['pelicula.codigo'] = [
+            'asc' => ['peliculas.codigo' => SORT_ASC],
+            'desc' => ['peliculas.codigo' => SORT_DESC],
+        ];
+
+
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'socio_id' => $this->socio_id,
-            'pelicula_id' => $this->pelicula_id,
-            'create_at' => $this->create_at,
             'devolucion' => $this->devolucion,
+            'socio_id' => $this->socio_id,
+            'socios.numero' => $this->getAttribute('socio.numero'),
+            'peliculas.codigo' => $this->getAttribute('pelicula.codigo'),
         ]);
+
+        $query->andFilterWhere([
+            'like',
+            'lower(peliculas.titulo)',
+            mb_strtolower($this->getAttribute('pelicula.titulo')),
+        ]);
+
+        $query->andFilterWhere([
+            'like',
+            'lower(socios.nombre)',
+            mb_strtolower($this->getAttribute('socio.nombre')),
+        ]);
+
+
+
 
 
 
