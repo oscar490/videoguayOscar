@@ -117,6 +117,8 @@ class AlquileresController extends Controller
         ]);
     }
 
+
+
     public function actionListado()
     {
         $dataProvider = new ActiveDataProvider([

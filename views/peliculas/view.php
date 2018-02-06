@@ -36,50 +36,36 @@ $this->params['breadcrumbs'][] = $this->title;
             'precio_alq:currency:Precio',
         ],
     ]) ?>
+<h3>Últimos alquileres de esta película</h3>
+    <?= GridView::widget([
+        'dataProvider'=>$dataProvider,
+        'columns'=> [
+            'socio.numero',
+            'socio.nombre',
+            [
+                'attribute'=>'create_at',
+                'format'=>'dateTime',
+                'label'=>'Fecha de alquiler',
+            ],
 
-    <?php if (!empty($alquileres)):  ?>
-        <h3>Últimos alquileres de esta película</h3>
-        <table class='table'>
-            <thead>
-                <th>Número</th>
-                <th>Nombre</th>
-                <th>Fecha de alquiler</th>
-                <th>Fecha de devolución</th>
-            </thead>
-            <tbody>
-                <?php foreach ($alquileres as $alquiler): ?>
-                    <tr>
-                        <td><?= Html::encode($alquiler->socio->numero)?></td>
-                        <td>
-                            <?= Html::a(
-                                $alquiler->socio->nombre,
-                                ['socios/view','id'=>$alquiler->socio->id]
-                            );
-                            ?>
-                        </td>
-                        <td><?= Yii::$app->formatter->asDatetime($alquiler->create_at)?></td>
-                        <td>
-                            <?php if ($alquiler->devolucion === null): ?>
-                                <?= Html::beginForm([
-                                    'alquileres/devolver',
-                                    'numero'=>$alquiler->socio->numero,
-                                    ])
-                                ?>
-                                    <?= Html::hiddenInput('id', $alquiler->id) ?>
-                                    <?= Html::submitButton('Devolver', ['class'=>'btn-xs btn-danger']) ?>
-                                <?= Html::endForm() ?>
-                            <?php else: ?>
-                                <?= Yii::$app->formatter->asDatetime($alquiler->devolucion)?>
-                            <?php endif ?>
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'template'=>'{devolver}',
+                'header'=>'Acciones',
+                'buttons'=> [
+                    'devolver'=> function ($url, $model, $params) {
+                        return $model->create_at;
+                    }
+                ]
+            ]
+
+        ]
+    ]) ?>
 
 
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h3>No se han realizado alquileres de esta película</h3>
-    <?php endif ?>
+
+
+
+
 
 </div>

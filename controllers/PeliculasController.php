@@ -119,14 +119,44 @@ class PeliculasController extends Controller
 
         $alquileres = Alquileres::find()
             ->with('socio') //  Nombre de relacion.
-            ->where(['pelicula_id' => $id])
-            ->orderBy(['create_at' => SORT_DESC])
-            ->limit(10)
-            ->all();
+            ->joinWith('socio')
+            ->where(['pelicula_id' => $id]);
+
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $alquileres,
+            'pagination' => [
+                'pageSize' => '5',
+            ],
+            'sort' => [
+                'attributes' => [
+                    'socio.numero' => [
+                        'asc' => ['socios.numero' => SORT_ASC],
+                        'desc' => ['socios.numero' => SORT_DESC],
+                    ],
+                    'socio.nombre' => [
+                        'asc' => ['socios.nombre' => SORT_ASC],
+                        'desc' => ['socios.nombre' => SORT_DESC],
+                    ],
+                    'create_at' => [
+                        'asc' => ['create_at' => SORT_ASC],
+                        'desc' => ['create_at' => SORT_DESC],
+                    ],
+                    'devolucion' => [
+                        'asc' => ['devolucion' => SORT_ASC],
+                        'desc' => ['devolucion' => SORT_DESC],
+                    ],
+                ],
+            ],
+        ]);
+
+        $dataProvider->sort->defaultOrder = ['create_at' => SORT_DESC];
+
+
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'alquileres' => $alquileres,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
