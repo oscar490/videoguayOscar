@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pelicula_id')->textInput() ?>
 
-    <?= $form->field($model, 'create_at')->textInput() ?>
+    <?= $form->field($model, 'createAtForm')->textInput() ?>
 
     <?= $form->field($model, 'devolucion')->textInput() ?>
 

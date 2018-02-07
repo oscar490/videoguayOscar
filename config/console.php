@@ -11,15 +11,16 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'formatter'=> [
-            'dateFormat'=>'dd-MM-yyyy',
+        'formatter' => [
+            'dateTimeFormat' => 'd-m-Y H:i:s',
+            'dateForma' => 'H:i:s',
         ],
         'log' => $log,
         'db' => $db,
