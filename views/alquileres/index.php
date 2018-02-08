@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="alquileres-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= $this->render('_search', ['model' => $searchModel]); ?>
+    <?php //$this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Create Alquileres', ['create'], ['class' => 'btn btn-success']) ?>
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model'=>$searchModel,
                     'attribute' => 'create_at',
                 ]),
-                'label'=>'Fecha de alquiler',
+
                 'format'=>'datetime',
             ],
 

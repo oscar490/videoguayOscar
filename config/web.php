@@ -33,7 +33,7 @@ $config = [
     'components' => [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
-            'datetimeFormat' => 'php:d-m-Y H:i:s',
+            'datetimeFormat' => $params['datetimeFormat'],
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -102,6 +102,11 @@ $config = [
                     'pluginOptions' => [
                         'autoclose' => true,
                         'weekStart' => 1,
+                    ],
+                ],
+                \kartik\datecontrol\Module::FORMAT_DATE => [
+                    'options' => [
+                        'readonly' => true,
                     ],
                 ],
             ],
