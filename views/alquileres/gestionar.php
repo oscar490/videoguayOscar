@@ -3,7 +3,7 @@ use yii\grid;
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use grid\GridView;
+use yii\grid\GridView;
 
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
@@ -31,10 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php if (isset($socio)): ?>
 
     <h3><?= $socio->enlace ?></h3>
-    <?php if (!empty($alquileres)): ?>
+
         <h3>Alquileres pendientes</h3>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'columns'=> [
+                'pelicula.codigo',
+                'pelicula.titulo',
+                'create_at',
+                'devolucion',
+            ]
         ])?>
 <?php endif ?>
     <hr>
@@ -80,9 +86,3 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::endForm() ?>
             <?php endif ?>
         <?php endif ?>
-
-
-
-
-
-<?php endif?>
