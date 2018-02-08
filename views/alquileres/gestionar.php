@@ -1,6 +1,10 @@
 <?php
+use yii\grid;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use grid\GridView;
+
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,33 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= $socio->enlace ?></h3>
     <?php if (!empty($alquileres)): ?>
         <h3>Alquileres pendientes</h3>
-        <table class='table'>
-            <thead>
-                <td>Código</td>
-                <td>Título</td>
-                <td>Fecha de alquiler</td>
-                <td>Acciones</td>
-            </thead>
-            <tbody>
-                <?php foreach ($alquileres as $alquiler): ?>
-                    <tr>
-                        <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                        <td><?= Html::a($alquiler->pelicula->titulo, ['peliculas/view', 'id'=>$alquiler->pelicula->id]) ?></td>
-                        <td><?= Yii::$app->formatter->asDatetime($alquiler->create_at) ?></td>
-                        <td>
-                            <?= Html::beginForm(['alquileres/devolver','post', 'numero'=>$socio->numero]) ?>
-                                    <?= Html::submitButton('Devolver', ['class'=>'btn-xs btn-danger']) ?>
-                                    <?= Html::hiddenInput('id', $alquiler->id) ?>
-                            <?= Html::endForm() ?>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h3>No tiene alquileres pendientes</h3>
-    <?php endif ?>
-
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+        ])?>
+<?php endif ?>
     <hr>
 
     <?php $form = ActiveForm::begin([
