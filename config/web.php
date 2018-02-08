@@ -14,6 +14,22 @@ $config = [
         '@npm' => '@vendor/npm-asset',
     ],
     'language' => 'es-ES',
+    'container' => [
+        'definitions' => [
+            yii\data\Pagination::className() => [
+                'pageSize' => 5,
+            ],
+            kartik\number\NumberControl::className() => [
+                'maskedInputOptions' => [
+                    'prefix' => '',
+                    'suffix' => ' €',
+                    'groupSeparator' => '.',
+                    'radixPoint' => ',',
+                    // 'allowMinus' => false
+                ],
+            ],
+        ],
+    ],
     'components' => [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
@@ -63,6 +79,34 @@ $config = [
         */
     ],
     'params' => $params,
+    'modules' => [
+        'datecontrol' => [
+            'class' => '\kartik\datecontrol\Module',
+            'displaySettings' => [
+                \kartik\datecontrol\Module::FORMAT_DATE => $params['dateFormat'],
+                \kartik\datecontrol\Module::FORMAT_TIME => $params['timeFormat'],
+                \kartik\datecontrol\Module::FORMAT_DATETIME => $params['datetimeFormat'],
+            ],
+            'saveSettings' => [
+                \kartik\datecontrol\Module::FORMAT_DATE => 'php:Y-m-d',
+                \kartik\datecontrol\Module::FORMAT_TIME => 'php:H:i:s',
+                \kartik\datecontrol\Module::FORMAT_DATETIME => 'php:Y-m-d H:i:s',
+            ],
+            'displayTimezone' => 'Europe/Madrid',
+            'saveTimezone' => 'UTC',
+            'autoWidgetSettings' => [
+                \kartik\datecontrol\Module::FORMAT_DATETIME => [
+                    'options' => [
+                        'readonly' => true,
+                    ],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'weekStart' => 1,
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {

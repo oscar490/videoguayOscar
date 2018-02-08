@@ -4,15 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-    "content-hash": "3e9f1abde4acd0b16c426e2f1b70c8b0",
-=======
-    "content-hash": "9ead0954a3e012b9d64bad8ee8b5352e",
->>>>>>> Stashed changes
-=======
-    "content-hash": "373887b4c92eb07b97593def052f3a09",
->>>>>>> otro
+    "content-hash": "2d90226212547b1c1dcc9639d2350ad8",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -486,30 +478,6 @@
             "time": "2017-09-29T06:18:14+00:00"
         },
         {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-            "name": "kartik-v/yii2-widget-datetimepicker",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
-                "reference": "36f8327bbac47da7f3a38c94f0546308337aa963"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/36f8327bbac47da7f3a38c94f0546308337aa963",
-                "reference": "36f8327bbac47da7f3a38c94f0546308337aa963",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/yii2-krajee-base": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "kartik\\datetime\\": ""
-=======
             "name": "kartik-v/yii2-number",
             "version": "v1.0.0",
             "source": {
@@ -535,7 +503,6 @@
             "autoload": {
                 "psr-4": {
                     "kartik\\number\\": ""
->>>>>>> otro
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -549,7 +516,108 @@
                     "homepage": "http://www.krajee.com/"
                 }
             ],
-<<<<<<< HEAD
+            "description": "Number control and format mask input for Yii2 Framework.",
+            "homepage": "https://github.com/kartik-v/yii2-number",
+            "keywords": [
+                "currency",
+                "extension",
+                "format",
+                "mask",
+                "number",
+                "number control",
+                "widget",
+                "yii2"
+            ],
+            "time": "2018-01-30T13:10:08+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-widget-datepicker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-datepicker.git",
+                "reference": "eb7e829b8a0b341dc22ef2dc28d1bb4ff08e3550"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datepicker/zipball/eb7e829b8a0b341dc22ef2dc28d1bb4ff08e3550",
+                "reference": "eb7e829b8a0b341dc22ef2dc28d1bb4ff08e3550",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "~1.7"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\date\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Enhanced Yii2 wrapper for the bootstrap datepicker plugin (sub repo split from yii2-widgets).",
+            "homepage": "https://github.com/kartik-v/yii2-widget-datepicker",
+            "keywords": [
+                "date",
+                "extension",
+                "form",
+                "jquery",
+                "picker",
+                "plugin",
+                "select2",
+                "widget",
+                "yii2"
+            ],
+            "time": "2017-09-06T06:18:08+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-widget-datetimepicker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-datetimepicker.git",
+                "reference": "36f8327bbac47da7f3a38c94f0546308337aa963"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-datetimepicker/zipball/36f8327bbac47da7f3a38c94f0546308337aa963",
+                "reference": "36f8327bbac47da7f3a38c94f0546308337aa963",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\datetime\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
             "description": "Enhanced Yii2 wrapper for the bootstrap datetimepicker plugin (sub repo split from yii2-widgets)",
             "homepage": "https://github.com/kartik-v/yii2-widget-datetimepicker",
             "keywords": [
@@ -566,24 +634,6 @@
             "time": "2017-07-18T08:42:00+00:00"
         },
         {
->>>>>>> Stashed changes
-=======
-            "description": "Number control and format mask input for Yii2 Framework.",
-            "homepage": "https://github.com/kartik-v/yii2-number",
-            "keywords": [
-                "currency",
-                "extension",
-                "format",
-                "mask",
-                "number",
-                "number control",
-                "widget",
-                "yii2"
-            ],
-            "time": "2018-01-30T13:10:08+00:00"
-        },
-        {
->>>>>>> otro
             "name": "swiftmailer/swiftmailer",
             "version": "v6.0.2",
             "source": {
@@ -4905,16 +4955,16 @@
         },
         {
             "name": "yiisoft/yii2-gii",
-            "version": "dev-master",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-gii.git",
-                "reference": "51e58d725623fbfaa0fc93bfff07040f7dbb66bb"
+                "reference": "db41f647d9b73702ceb6864fdfce827a72b5ce42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/51e58d725623fbfaa0fc93bfff07040f7dbb66bb",
-                "reference": "51e58d725623fbfaa0fc93bfff07040f7dbb66bb",
+                "url": "https://api.github.com/repos/yiisoft/yii2-gii/zipball/db41f647d9b73702ceb6864fdfce827a72b5ce42",
+                "reference": "db41f647d9b73702ceb6864fdfce827a72b5ce42",
                 "shasum": ""
             },
             "require": {
@@ -4954,7 +5004,7 @@
                 "gii",
                 "yii2"
             ],
-            "time": "2018-01-16T11:54:57+00:00"
+            "time": "2017-12-22T23:53:06+00:00"
         },
         {
             "name": "yiisoft/yii2-shell",
@@ -5012,11 +5062,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kartik-v/yii2-datecontrol": 20,
-<<<<<<< Updated upstream
-=======
         "kartik-v/yii2-widget-datetimepicker": 20,
->>>>>>> Stashed changes
-        "yiisoft/yii2-gii": 20,
+        "kartik-v/yii2-widget-datepicker": 20,
         "yiisoft/yii2-shell": 20,
         "yiisoft/yii2-apidoc": 20
     },

@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
+use kartik\datecontrol\DateControl;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AlquileresSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -30,6 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute'=> 'create_at',
+                'filter' => DateControl::widget([
+                    'type'=>DateControl::FORMAT_DATE,
+                    'model'=>$searchModel,
+                    'attribute' => 'create_at',
+                ]),
                 'label'=>'Fecha de alquiler',
                 'format'=>'datetime',
             ],
