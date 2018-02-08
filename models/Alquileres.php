@@ -18,7 +18,6 @@ use Yii;
  */
 class Alquileres extends \yii\db\ActiveRecord
 {
-    public $createAtForm;
     /**
      * Escenario usado cuando se crea una nueva instancia.
      * @var [type]
@@ -33,10 +32,7 @@ class Alquileres extends \yii\db\ActiveRecord
         return 'alquileres';
     }
 
-    public function attributes()
-    {
-        return array_merge(parent::attributes(), ['createdAtForm']);
-    }
+
 
     /**
      * @inheritdoc
@@ -47,13 +43,7 @@ class Alquileres extends \yii\db\ActiveRecord
             [['socio_id', 'pelicula_id'], 'required'],
             [['socio_id', 'pelicula_id'], 'default', 'value' => null],
             [['socio_id', 'pelicula_id'], 'integer'],
-            [
-                ['createAtForm'],
-                'datetime',
-                'timeZone' => Yii::$app->formatter->timeZone,
-                'timestampAttribute' => 'create_at',
-                'timestampAttributeFormat' => 'php: Y-m-d H:i:s',
-            ],
+
             [['devolucion'], 'safe'],
             [['socio_id', 'pelicula_id', 'create_at'], 'unique', 'targetAttribute' => ['socio_id', 'pelicula_id', 'create_at']],
             [['pelicula_id'], 'exist', 'skipOnError' => true, 'targetClass' => Peliculas::className(), 'targetAttribute' => ['pelicula_id' => 'id']],
