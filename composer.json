@@ -20,7 +20,12 @@
         "yiisoft/yii2": "~2.0.13",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.1.0",
+<<<<<<< Updated upstream
         "kartik-v/yii2-datecontrol": "dev-master"
+=======
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kartik-v/yii2-widget-datetimepicker": "dev-master"
+>>>>>>> Stashed changes
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
