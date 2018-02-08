@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "alquileres".
  *
@@ -70,12 +68,7 @@ class Alquileres extends \yii\db\ActiveRecord
         ];
     }
 
-    public function afterFind()
-    {
-        parent::afterFind();
 
-        $this->createAtForm = Yii::$app->formatter->asDateTime($this->create_at);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
