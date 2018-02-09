@@ -4,6 +4,7 @@ use yii\grid;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\grid\GridView;
+use kartik\datecontrol\DateControl;
 
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
@@ -35,10 +36,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3>Alquileres pendientes de <?= $socio->enlace ?></h3>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns'=> [
             'pelicula.codigo',
             'pelicula.titulo',
-            'create_at:datetime:Fecha de alquiler',
+            [
+                'attribute'=> 'create_at',
+                'filter' => DateControl::widget([
+                    'type'=>DateControl::FORMAT_DATE,
+                    'model'=>$searchModel,
+                    'attribute' => 'create_at',
+                ]),
+
+                'format'=>'datetime',
+            ],
             [
                 'class'=>'yii\grid\ActionColumn',
                 'header'=>'Acciones',
@@ -56,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ]
     ])?>
-<?php endif ?>
+
     <hr>
 
     <?php $form = ActiveForm::begin([
@@ -100,3 +111,4 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::endForm() ?>
             <?php endif ?>
         <?php endif ?>
+<?php endif ?>

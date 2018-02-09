@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Alquileres;
+use app\models\AlquileresPendientesSearch;
 use app\models\AlquileresSearch;
 use app\models\GestionarPeliculasForm;
 use app\models\GestionarSociosForm;
@@ -52,31 +53,16 @@ class AlquileresController extends Controller
             'codigo' => $codigo,
         ]);
 
-        $searchModel = new AlquileresSearch();
+        $searchModel = new AlquileresPendientesSearch();
 
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
-            $data['dataProvider'] = new ActiveDataProvider([
-                'query' => $data['socio']->getAlquileres()
-                ->joinWith('pelicula')
-                ->where(['devolucion' => null]),
-            ]);
 
-            $data['dataProvider']->sort->attributes['pelicula.titulo'] = [
-                'asc' => ['titulo' => SORT_ASC],
-                'desc' => ['titulo' => SORT_DESC],
-            ];
+            $data['dataProvider'] = $searchModel->search(Yii::$app->request->get(), $modeloSocios->numero);
 
-            $data['dataProvider']->sort->attributes['pelicula.codigo'] = [
-                'asc' => ['codigo' => SORT_ASC],
-                'desc' => ['codigo' => SORT_DESC],
-            ];
-
-            $data['dataProvider']->pagination->pageSize = '2';
-
-
+            $data['searchModel'] = $searchModel;
 
             if ($codigo != null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
