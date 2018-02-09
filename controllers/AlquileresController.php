@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Alquileres;
+use app\models\AlquileresPendientesSearch;
 use app\models\AlquileresSearch;
 use app\models\GestionarPeliculasForm;
 use app\models\GestionarSociosForm;
@@ -52,12 +53,16 @@ class AlquileresController extends Controller
             'codigo' => $codigo,
         ]);
 
+        $searchModel = new AlquileresPendientesSearch();
+
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
-            $data['alquileres'] = $data['socio']->getAlquileres()
-                ->where(['devolucion' => null])->all();
+
+            $data['dataProvider'] = $searchModel->search(Yii::$app->request->get(), $modeloSocios->numero);
+
+            $data['searchModel'] = $searchModel;
 
             if ($codigo != null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
@@ -94,7 +99,7 @@ class AlquileresController extends Controller
             'rutaVuelta',
             ['alquileres/gestionar', 'numero' => $numero]
         );
-
+        Yii::$app->session->set('mensaje', 'Se ha realizado la devolución correctamente');
         Yii::$app->session->remove('rutaVuelta');
         return $this->redirect($url);
     }

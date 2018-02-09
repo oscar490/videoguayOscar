@@ -89,6 +89,11 @@ class PeliculasController extends Controller
             'modelo' => $modelo,
         ]);
     }
+
+    public function actionBuscar()
+    {
+        return $this->render('buscador.php');
+    }
     /**
      * Lists all Peliculas models.
      * @return mixed

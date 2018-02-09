@@ -1,6 +1,11 @@
 <?php
+use yii\grid;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\grid\GridView;
+use kartik\datecontrol\DateControl;
+
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -10,7 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php Yii::$app->session->remove('mensaje') ?>
     </div>
 <?php endif ?>
+
 <h1><?= $this->title ?></h1>
+
 <?php $form = ActiveForm::begin([
     'method'=>'get',
     'action'=>['alquileres/gestionar'],
@@ -26,35 +33,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php if (isset($socio)): ?>
 
-    <h3><?= $socio->enlace ?></h3>
-    <?php if (!empty($alquileres)): ?>
-        <h3>Alquileres pendientes</h3>
-        <table class='table'>
-            <thead>
-                <td>Código</td>
-                <td>Título</td>
-                <td>Fecha de alquiler</td>
-                <td>Acciones</td>
-            </thead>
-            <tbody>
-                <?php foreach ($alquileres as $alquiler): ?>
-                    <tr>
-                        <td><?= Html::encode($alquiler->pelicula->codigo) ?></td>
-                        <td><?= Html::a($alquiler->pelicula->titulo, ['peliculas/view', 'id'=>$alquiler->pelicula->id]) ?></td>
-                        <td><?= Yii::$app->formatter->asDatetime($alquiler->create_at) ?></td>
-                        <td>
-                            <?= Html::beginForm(['alquileres/devolver','post', 'numero'=>$socio->numero]) ?>
-                                    <?= Html::submitButton('Devolver', ['class'=>'btn-xs btn-danger']) ?>
-                                    <?= Html::hiddenInput('id', $alquiler->id) ?>
-                            <?= Html::endForm() ?>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <h3>No tiene alquileres pendientes</h3>
-    <?php endif ?>
+    <h3>Alquileres pendientes de <?= $socio->enlace ?></h3>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns'=> [
+            'pelicula.codigo',
+            'pelicula.titulo',
+            [
+                'attribute'=> 'create_at',
+                'filter' => DateControl::widget([
+                    'type'=>DateControl::FORMAT_DATE,
+                    'model'=>$searchModel,
+                    'attribute' => 'create_at',
+                ]),
+
+                'format'=>'datetime',
+            ],
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Acciones',
+                'template'=>"{devolver}",
+                'buttons'=>[
+                    'devolver' => function ($url, $model, $param) {
+                        return Html::beginForm(['alquileres/devolver',
+                        'numero'=>$model->socio->numero]) .
+                        Html::hiddenInput('id', $model->id) .
+                        Html::submitButton('Devolver' ,['class'=>'btn-xs btn-danger']) .
+                        Html::endForm();
+
+                    }
+                ]
+            ]
+        ]
+    ])?>
 
     <hr>
 
@@ -99,9 +111,4 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::endForm() ?>
             <?php endif ?>
         <?php endif ?>
-
-
-
-
-
-<?php endif?>
+<?php endif ?>
