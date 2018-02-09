@@ -14,7 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php Yii::$app->session->remove('mensaje') ?>
     </div>
 <?php endif ?>
+
 <h1><?= $this->title ?></h1>
+
 <?php $form = ActiveForm::begin([
     'method'=>'get',
     'action'=>['alquileres/gestionar'],
@@ -30,18 +32,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php if (isset($socio)): ?>
 
-    <h3><?= $socio->enlace ?></h3>
+    <h3>Alquileres pendientes de <?= $socio->enlace ?></h3>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns'=> [
+            'pelicula.codigo',
+            'pelicula.titulo',
+            'create_at:datetime:Fecha de alquiler',
+            [
+                'class'=>'yii\grid\ActionColumn',
+                'header'=>'Acciones',
+                'template'=>"{devolver}",
+                'buttons'=>[
+                    'devolver' => function ($url, $model, $param) {
+                        return Html::beginForm(['alquileres/devolver',
+                        'numero'=>$model->socio->numero]) .
+                        Html::hiddenInput('id', $model->id) .
+                        Html::submitButton('Devolver' ,['class'=>'btn-xs btn-danger']) .
+                        Html::endForm();
 
-        <h3>Alquileres pendientes</h3>
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'columns'=> [
-                'pelicula.codigo',
-                'pelicula.titulo',
-                'create_at',
-                'devolucion',
+                    }
+                ]
             ]
-        ])?>
+        ]
+    ])?>
 <?php endif ?>
     <hr>
 

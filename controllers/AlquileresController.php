@@ -52,14 +52,31 @@ class AlquileresController extends Controller
             'codigo' => $codigo,
         ]);
 
+        $searchModel = new AlquileresSearch();
+
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
             $data['dataProvider'] = new ActiveDataProvider([
                 'query' => $data['socio']->getAlquileres()
+                ->joinWith('pelicula')
                 ->where(['devolucion' => null]),
             ]);
+
+            $data['dataProvider']->sort->attributes['pelicula.titulo'] = [
+                'asc' => ['titulo' => SORT_ASC],
+                'desc' => ['titulo' => SORT_DESC],
+            ];
+
+            $data['dataProvider']->sort->attributes['pelicula.codigo'] = [
+                'asc' => ['codigo' => SORT_ASC],
+                'desc' => ['codigo' => SORT_DESC],
+            ];
+
+            $data['dataProvider']->pagination->pageSize = '2';
+
+
 
             if ($codigo != null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
@@ -96,7 +113,7 @@ class AlquileresController extends Controller
             'rutaVuelta',
             ['alquileres/gestionar', 'numero' => $numero]
         );
-
+        Yii::$app->session->set('mensaje', 'Se ha realizado la devolución correctamente');
         Yii::$app->session->remove('rutaVuelta');
         return $this->redirect($url);
     }
