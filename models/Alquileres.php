@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use yii\helpers\Html;
+
 /**
  * This is the model class for table "alquileres".
  *
@@ -61,14 +63,20 @@ class Alquileres extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'socio_id' => 'Socio ID',
-            'pelicula_id' => 'Pelicula ID',
-            'create_at:dateTime' => 'Fecha de alquiler',
+            'socio_id' => 'Identificadir del Socio',
+            'pelicula_id' => 'Identificador de Pelícila',
+            'create_at' => 'Fecha de alquiler',
             'devolucion' => 'Devolución',
         ];
     }
 
-
+    public function getFechaEnlace()
+    {
+        return Html::a($this->create_at, [
+            'alquileres/index',
+            'AlquileresSearch[create_at]' => $this->create_at,
+        ]);
+    }
 
 
 

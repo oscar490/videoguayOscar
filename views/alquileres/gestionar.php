@@ -9,12 +9,7 @@ use kartik\datecontrol\DateControl;
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php if (Yii::$app->session->get('mensaje') !== null): ?>
-    <div class='alert alert-success'>
-        <?= Yii::$app->session->get('mensaje') ?>
-        <?php Yii::$app->session->remove('mensaje') ?>
-    </div>
-<?php endif ?>
+
 
 <h1><?= $this->title ?></h1>
 
@@ -39,7 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns'=> [
             'pelicula.codigo',
-            'pelicula.titulo',
+            [
+                'attribute'=>'pelicula.titulo',
+                'value'=> function ($model) {
+                    return $model->pelicula->enlace;
+                },
+                'format'=>'raw',
+            ],
             [
                 'attribute'=> 'create_at',
                 'filter' => DateControl::widget([
@@ -47,7 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model'=>$searchModel,
                     'attribute' => 'create_at',
                 ]),
-
+                'content'=> function ($model, $key, $index, $column) {
+                    return Html::a($model->create_at, [
+                        'alquileres/gestionar',
+                        'numero'=>$model->socio->numero,
+                        'AlquileresSearch[create_at]'=>$model->create_at,
+                    ]);
+                },
                 'format'=>'datetime',
             ],
             [

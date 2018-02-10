@@ -38,12 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'create_at',
                 ]),
                 'content'=> function ($model, $key, $index, $column) {
-                    return Html::a($model->create_at, [
-                        'alquileres/index',
-                        'AlquileresSearch[create_at]'=>$model->create_at,
-                    ]);
+                    return $model->fechaEnlace;
                 },
                 'format'=>'datetime',
+                'label'=>'Fecha de alquiler',
             ],
 
             'devolucion:datetime',

@@ -11,6 +11,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -157,7 +158,10 @@ class PeliculasController extends Controller
 
         $dataProvider->sort->defaultOrder = ['create_at' => SORT_DESC];
 
-
+        \Yii::$app->session->set(
+            'rutaVuelta',
+            Url::to(['peliculas/view', 'id' => $id])
+        );
 
         return $this->render('view', [
             'model' => $this->findModel($id),

@@ -51,11 +51,23 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'yii\grid\ActionColumn',
                 'template'=>'{devolver}',
-                'header'=>'Acciones',
+                'header'=>'Devolución',
                 'buttons'=> [
                     'devolver'=> function ($url, $model, $params) {
-                        return $model->create_at;
-                    }
+                        if ($model->devolucion === null) {
+
+
+                            return Html::beginForm([
+                                'alquileres/devolver',
+                                'numero'=>$model->socio->numero
+                            ]). Html::submitButton('Devolver', [
+                                'class'=>'btn-xs btn-danger'
+                            ]) . Html::hiddenInput('id', $model->id)
+                            . Html::endForm();
+                        } else {
+                            return $model->devolucion;
+                        }
+                    },
                 ]
             ]
 

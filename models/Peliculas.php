@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use yii\helpers\Html;
+
 /**
  * This is the model class for table "peliculas".
  *
@@ -63,6 +65,11 @@ class Peliculas extends \yii\db\ActiveRecord
         return $this->getAlquileres()
             ->where(['devolucion' => null])
             ->exists();
+    }
+
+    public function getEnlace()
+    {
+        return Html::a($this->titulo, ['peliculas/view', 'id' => $this->id]);
     }
     /**
      * @return \yii\db\ActiveQuery
