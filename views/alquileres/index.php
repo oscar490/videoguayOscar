@@ -37,7 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model'=>$searchModel,
                     'attribute' => 'create_at',
                 ]),
-
+                'content'=> function ($model, $key, $index, $column) {
+                    return Html::a($model->create_at, [
+                        'alquileres/index',
+                        'AlquileresSearch[create_at]'=>$model->create_at,
+                    ]);
+                },
                 'format'=>'datetime',
             ],
 
