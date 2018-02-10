@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\models\Alquileres;
-use app\models\AlquileresPendientesSearch;
 use app\models\AlquileresSearch;
 use app\models\GestionarPeliculasForm;
 use app\models\GestionarSociosForm;
@@ -53,7 +52,7 @@ class AlquileresController extends Controller
             'codigo' => $codigo,
         ]);
 
-        $searchModel = new AlquileresPendientesSearch();
+        $searchModel = new AlquileresSearch();
 
         $data = [];
 
@@ -61,6 +60,12 @@ class AlquileresController extends Controller
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
 
             $data['dataProvider'] = $searchModel->search(Yii::$app->request->get(), $modeloSocios->numero);
+
+            $data['dataProvider']->query
+                ->andWhere([
+                    'numero' => $modeloSocios->numero,
+                    'devolucion' => null,
+                ]);
 
             $data['searchModel'] = $searchModel;
 
