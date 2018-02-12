@@ -11,6 +11,7 @@ use app\models\Socios;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -31,6 +32,22 @@ class AlquileresController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class'=>AccessControl::className(),
+                'only'=>['gestionar', 'index'],
+                'rules'=> [
+                    [
+                        'allow'=>true,
+                        'actions'=>['gestionar'],
+                        'roles'=>['@'],
+                    ],
+                    [
+                        'allow'=>true,
+                        'actions'=>['index'],
+                        'roles'=>['@'],
+                    ]
                 ],
             ],
         ];
