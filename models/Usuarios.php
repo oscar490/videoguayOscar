@@ -83,7 +83,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        // return $this->auth_key;
+        return $this->auth_key;
     }
 
     /**
@@ -92,7 +92,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        // return $this->getAuthKey() === $authKey;
+        return $this->auth_key === $authKey;
     }
 
     public function validatePassword($password)
