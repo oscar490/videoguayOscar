@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <h3>Últimos alquileres de esta película</h3>
     <?= GridView::widget([
         'dataProvider'=>$dataProvider,
+        'filterModel'=>$searchModel,
         'columns'=> [
             'socio.numero',
             'socio.nombre',
@@ -55,20 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons'=> [
                     'devolver'=> function ($url, $model, $params) {
                         if ($model->devolucion === null) {
-
-
-                            return Html::beginForm([
-                                'alquileres/devolver',
-                                'numero'=>$model->socio->numero
-                            ]). Html::submitButton('Devolver', [
-                                'class'=>'btn-xs btn-danger'
-                            ]) . Html::hiddenInput('id', $model->id)
-                            . Html::endForm();
+                            return $model->getFormularioDevolver(
+                                $model->id,
+                                $model->socio->numero
+                            );
                         } else {
-                            return $model->devolucion;
+                            return Yii::$app->formatter
+                                ->asDatetime($model->devolucion);
                         }
                     },
-                ]
+                ],
+
+
             ]
 
         ]

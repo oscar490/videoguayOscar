@@ -16,9 +16,9 @@ $config = [
     'language' => 'es-ES',
     'container' => [
         'definitions' => [
-            yii\data\Pagination::className() => [
-                'pageSize' => 5,
-            ],
+            // yii\data\Pagination::className() => [
+            //     'pageSize' => 5,
+            // ],
             kartik\number\NumberControl::className() => [
                 'maskedInputOptions' => [
                     'prefix' => '',
@@ -34,6 +34,7 @@ $config = [
         'formatter' => [
             'timeZone' => 'Europe/Madrid',
             'datetimeFormat' => $params['datetimeFormat'],
+            'currencyCode' => 'EUR',
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

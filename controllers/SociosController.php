@@ -57,25 +57,20 @@ class SociosController extends Controller
     {
         $alquileres = Alquileres::find()
             ->with('pelicula')
-            ->where(['devolucion' => null, 'socio_id' => $id])
-            ->orderBy(['create_at' => SORT_DESC])
-            ->limit(10)
-            ->all();
+            ->where(['devolucion' => null, 'socio_id' => $id]);
 
         Yii::$app->session->set(
             'rutaVuelta',
             Url::to(['socios/view', 'id' => $id])
         );
 
-        $dataprovider = new ActiveDataProvider([
+        $dataProvider = new ActiveDataProvider([
             'query' => $alquileres,
-            'pagination' => false,
-            'sort' => false,
         ]);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'alquileres' => $alquileres,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

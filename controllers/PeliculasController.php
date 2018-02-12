@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\AlquilarPeliculaForm;
 use app\models\Alquileres;
+use app\models\AlquileresSearch;
 use app\models\Peliculas;
 use app\models\PeliculasSearch;
 use app\models\Socios;
@@ -46,8 +47,7 @@ class PeliculasController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $peliculas,
             'pagination' => [
-                'totalCount' => $peliculas->count(),
-                'pageSize' => 2, // 20 por defecto
+                'pageSize' => 3, // 20 por defecto
             ],
         ]);
 
@@ -118,43 +118,12 @@ class PeliculasController extends Controller
      */
     public function actionView($id)
     {
-        // $s = Socios::find()
-        //     ->joinWith('peliculas p')
-        //     ->where(['p.id' => $id])
-        //     ->limit(10);
+        $searchModel = new AlquileresSearch();
 
-        $alquileres = Alquileres::find()
-            ->with('socio') //  Nombre de relacion.
-            ->joinWith('socio')
-            ->where(['pelicula_id' => $id]);
+        $dataProvider = $searchModel->search(Yii::$app->request->get());
 
+        $dataProvider->query->andWhere(['pelicula_id' => $id]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $alquileres,
-            'pagination' => [
-                'pageSize' => '5',
-            ],
-            'sort' => [
-                'attributes' => [
-                    'socio.numero' => [
-                        'asc' => ['socios.numero' => SORT_ASC],
-                        'desc' => ['socios.numero' => SORT_DESC],
-                    ],
-                    'socio.nombre' => [
-                        'asc' => ['socios.nombre' => SORT_ASC],
-                        'desc' => ['socios.nombre' => SORT_DESC],
-                    ],
-                    'create_at' => [
-                        'asc' => ['create_at' => SORT_ASC],
-                        'desc' => ['create_at' => SORT_DESC],
-                    ],
-                    'devolucion' => [
-                        'asc' => ['devolucion' => SORT_ASC],
-                        'desc' => ['devolucion' => SORT_DESC],
-                    ],
-                ],
-            ],
-        ]);
 
         $dataProvider->sort->defaultOrder = ['create_at' => SORT_DESC];
 
@@ -166,6 +135,7 @@ class PeliculasController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 

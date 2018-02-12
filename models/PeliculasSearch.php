@@ -2,10 +2,8 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Peliculas;
 
 /**
  * PeliculasSearch represents the model behind the search form of `app\models\Peliculas`.
@@ -34,7 +32,7 @@ class PeliculasSearch extends Peliculas
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Creates data provider instance with search query applied.
      *
      * @param array $params
      *
@@ -48,7 +46,12 @@ class PeliculasSearch extends Peliculas
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 2,
+            ],
         ]);
+
+        $dataProvider->sort->defaultOrder = ['codigo' => SORT_DESC];
 
         $this->load($params);
 

@@ -78,6 +78,23 @@ class Alquileres extends \yii\db\ActiveRecord
         ]);
     }
 
+    public function getFormularioDevolver($id, $numero)
+    {
+        return Html::beginForm(['alquileres/devolver', 'numero' => $numero])
+            . Html::hiddenInput('id', $id)
+            . Html::submitButton('Devolver', ['class' => 'btn-xs btn-danger'])
+            . Html::endForm();
+    }
+
+    public function getFormularioAlquilar($socio_id, $pelicula_id)
+    {
+        return Html::beginForm(['alquileres/alquilar'])
+            . Html::hiddenInput('pelicula_id', $pelicula_id)
+            . Html::hiddenInput('socio_id', $socio_id)
+            . Html::submitButton('Alquilar', ['class' => 'btn btn-primary'])
+            . Html::endForm();
+    }
+
 
 
     /**

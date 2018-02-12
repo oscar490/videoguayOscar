@@ -3,6 +3,8 @@
 /* @var $this yii\web\View */
 use app\models\Peliculas;
 
+use yii\grid\GridView;
+
 $this->title = 'VideoGuay';
 ?>
 <div class="site-index">
@@ -12,35 +14,29 @@ $this->title = 'VideoGuay';
 
         <p >Disfruta de nuestras novedades.</p>
 
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <p><a class="btn btn-lg btn-success" href="?r=peliculas/create">Añadir una nueva película</a></p>
     </div>
 
     <div class="body-content">
 
-    <?php
+    <?= GridView::widget([
+        'dataProvider'=>$dataProvider,
+        'filterModel'=>$searchModel,
+        'columns'=> [
+            'codigo',
+            [
+                'attribute'=>'titulo',
+                // 'header'=>'Título',
+                'value'=> function ($model) {
+                    return $model->enlace;
+                },
+                'format'=>'raw',
+            ],
+            'precio_alq:currency',
 
-    $filas = Peliculas::find()->limit(10)->all();
+        ]
+    ]) ?>
 
-     ?>
-     <div class="col-md-offset-3 col-md-6">
-         <h3>últimas peliculas</h3>
-         <table class='table'>
-             <thead>
-                 <th>Código</th>
-                 <th>Título</th>
-                 <th>Precio de alquiler</th>
-             </thead>
-             <tbody>
-                 <?php foreach ($filas as $pelicula): ?>
-                     <tr>
-                         <td><?= $pelicula->codigo ?></td>
-                         <td><?= $pelicula->titulo ?></td>
-                         <td><?= $pelicula->precio_alq ?></td>
-                     </tr>
-                 <?php endforeach ?>
-             </tbody>
-         </table>
-    </div>
 
 
         <!-- <div class="row">

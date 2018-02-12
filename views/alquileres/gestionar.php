@@ -63,11 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template'=>"{devolver}",
                 'buttons'=>[
                     'devolver' => function ($url, $model, $param) {
-                        return Html::beginForm(['alquileres/devolver',
-                        'numero'=>$model->socio->numero]) .
-                        Html::hiddenInput('id', $model->id) .
-                        Html::submitButton('Devolver' ,['class'=>'btn-xs btn-danger']) .
-                        Html::endForm();
+                        return $model->getFormularioDevolver($model->id, $model->socio->numero);
 
                     }
                 ]
@@ -89,33 +85,31 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <?php ActiveForm::end() ?>
 
+
         <?php if (isset($pelicula)): ?>
 
-            <h4><?= Html::a($pelicula->titulo, ['peliculas/view', 'id'=>$pelicula->id]) ?></h4>
-            <h4><?= Yii::$app->formatter->asCurrency($pelicula->precio_alq) ?></h4>
+            <?php $alquiler = $pelicula->getAlquileres()
+                ->where(['devolucion'=>null])
+                ->one();
+            ?>
+
+            <h4><?= $pelicula->enlace ?></h4>
+            <h4><?= Yii::$app->formatter->asCurrency($pelicula->precio_alq)?></h4>
             <?php if ($pelicula->estaAlquilada): ?>
                 <h4>está alquilada por
-                    <?php $alquiler = $pelicula->getAlquileres()
-                        ->where(['devolucion'=>null])
-                        ->one();
-                    ?>
-                    <?=
-                        $alquiler->socio->enlace;
-                    ?>
+                    <?= $alquiler->socio->enlace; ?>
                 </h4>
 
-                <?= Html::beginForm(['alquileres/devolver', 'numero'=>$alquiler->socio->numero]) ?>
-                    <?= Html::hiddenInput('id', $alquiler->id) ?>
-                    <?= Html::submitButton('Devolver', ['class'=>'btn-xs btn-danger']) ?>
-                <?= Html::endForm() ?>
+                <?= $alquiler->getFormularioDevolver(
+                        $alquiler->id,
+                        $alquiler->socio->numero
+                    ); ?>
+
             <?php else: ?>
-                <?= Html::beginForm([
-                    'alquileres/alquilar',
-                ]) ?>
-                    <?= Html::hiddenInput('pelicula_id', $pelicula->id) ?>
-                    <?= Html::hiddenInput('socio_id', $socio->id) ?>
-                    <?= Html::submitButton('Alquilar', ['class'=>'btn btn-primary']) ?>
-                <?= Html::endForm() ?>
+
+                <?= $pelicula->getAlquileres()->one()
+                    ->getFormularioAlquilar($socio->id, $pelicula->id);
+                ?>
             <?php endif ?>
         <?php endif ?>
 <?php endif ?>
