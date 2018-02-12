@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model'=>$searchModel,
                     'attribute' => 'create_at',
                 ]),
-                'content'=> function ($model, $key, $index, $column) {
+                'content'=> function ($model, $url, $key) {
                     return $model->fechaEnlace;
                 },
                 'format'=>'datetime',

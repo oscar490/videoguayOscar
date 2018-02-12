@@ -36,7 +36,7 @@ class AlquileresController extends Controller
             ],
             'access' => [
                 'class'=>AccessControl::className(),
-                'only'=>['gestionar', 'index'],
+                'only'=>['gestionar', 'index', 'alquilar'],
                 'rules'=> [
                     [
                         'allow'=>true,
@@ -45,8 +45,11 @@ class AlquileresController extends Controller
                     ],
                     [
                         'allow'=>true,
-                        'actions'=>['index'],
+                        'actions'=>['index', 'alquilar'],
                         'roles'=>['@'],
+                        'matchCallback'=> function ($rule, $action) {
+                            return Yii::$app->user->identity->nombre === 'pepe';
+                        }
                     ]
                 ],
             ],

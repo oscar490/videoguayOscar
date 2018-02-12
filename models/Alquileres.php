@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use Yii;
+
 use yii\helpers\Html;
 
 /**
@@ -72,7 +74,8 @@ class Alquileres extends \yii\db\ActiveRecord
 
     public function getFechaEnlace()
     {
-        return Html::a($this->create_at, [
+        $fecha = Yii::$app->formatter->asDatetime(($this->create_at));
+        return Html::a($fecha, [
             'alquileres/index',
             'AlquileresSearch[create_at]' => $this->create_at,
         ]);
