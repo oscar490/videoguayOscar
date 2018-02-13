@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -24,6 +25,17 @@ class UsuariosController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'acces' => [
+                'class' => AccessControl::className(),
+                'only' => ['update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['update'],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -64,10 +76,10 @@ class UsuariosController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Usuarios();
+        $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->goHome();
         }
 
         return $this->render('create', [
@@ -82,12 +94,14 @@ class UsuariosController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $model = $this->findModel($id);
+        $model = Yii::$app->user->identity;
+        $model->scenario = Usuarios::ESCENARIO_UPDATE;
+        $model->password = '';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->goHome();
         }
 
         return $this->render('update', [

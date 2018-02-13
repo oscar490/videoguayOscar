@@ -35,45 +35,46 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $items = [
+        ['label' => 'Inicio', 'url' => ['/site/index']],
+        ['label' => 'Gestionar', 'url' => ['alquileres/gestionar']],
+        ['label'=> 'Socios', 'url' => ['/socios/index']],
+        ['label'=> 'Películas', 'url' => ['/peliculas/index']],
+        ['label'=> 'Alquileres', 'url' => ['/alquileres/index']],
+        ['label' => 'About', 'url' => ['/site/about']],
+        ['label' => 'Contact', 'url' => ['/site/contact']],
+    ];
+
+    if (Yii::$app->user->isGuest) {
+        $items[] = [
+            'label'=>'Usuarios',
+            'items'=>[
+
+                ['label' => 'Iniciar sesión', 'url' => ['/site/login']],
+                ['label'=>'Registrarse', 'url' => ['usuarios/create']],
+            ],
+        ];
+    } else {
+        $items[] = [
+            'label'=>'Usuarios (' . Yii::$app->user->identity->nombre . ')',
+            'items' =>[
+
+                ['label'=>'Modificar datos', 'url'=>['usuarios/update']],
+                '<li class="divider"></li>',
+                [
+                    'label'=>'Logout',
+                    'url'=>['site/logout'],
+                    'linkOptions'=>['data-method'=>'POST'],
+                ],
+            ]
+        ];
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Inicio', 'url' => ['/site/index']],
-            ['label' => 'Gestionar', 'url' => ['alquileres/gestionar']],
-            ['label'=> 'Socios', 'url' => ['/socios/index']],
-            ['label'=> 'Películas', 'url' => ['/peliculas/index']],
-            ['label'=> 'Alquileres', 'url' => ['/alquileres/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            [
-                'label'=>'Usuario',
-                'items'=>[
-                    Yii::$app->user->isGuest ? (
-                        ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
-                    ) : (
-                        '<li>'
-                        . Html::beginForm(['/site/logout'], 'post')
-                        . Html::submitButton(
-                            'Logout (' . Yii::$app->user->identity->nombre . ')',
-                            ['class' => 'btn btn-link logout']
-                        )
-                        . Html::endForm()
-                        . '</li>'
-                    ),
-                        Yii::$app->user->identity === null ? (
-                        ['label'=>'Registrarse', 'url' => ['usuarios/create']]
-                        ) : (
-                        ['label'=>'Perfil', 'url' => [
-                            'usuarios/view',
-                            'id'=>Yii::$app->user->identity->id
-                            ]]
-                        )
-                ]
-            ]
-
-
-        ],
+        'items' => $items,
     ]);
+
     NavBar::end();
     ?>
 

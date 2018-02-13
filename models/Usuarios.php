@@ -15,6 +15,9 @@ use yii\web\IdentityInterface;
  */
 class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const ESCENARIO_CREATE = 'create';
+    const ESCENARIO_UPDATE = 'update';
+
     public $passwordRepetir;
     /**
      * @inheritdoc
@@ -30,11 +33,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'password'], 'required'],
-            [['nombre', 'password', 'email'], 'string', 'max' => 255],
+            [['nombre'], 'required'],
+            [['password', 'passwordRepetir'], 'required', 'on' => self::ESCENARIO_CREATE],
+            [['nombre', 'password', 'passwordRepetir', 'email'], 'string', 'max' => 255],
             [['email'], 'email'],
             [['nombre'], 'unique'],
-            [['passwordRepetir'], 'comprobarIgualdad'],
+            [['email'], 'default'],
+            [
+                ['passwordRepetir'],
+                'compare',
+                'compareAttribute' => 'password',
+                'skipOnEmpty' => false,
+                'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
+            ],
         ];
     }
 
@@ -44,6 +55,14 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'passwordRepetir',
             'auth_key',
         ]);
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::ESCENARIO_CREATE => ['nombre', 'passwordRepetir', 'password', 'email'],
+            self::ESCENARIO_UPDATE => ['nombre', 'passwordRepetir', 'password', 'email'],
+        ];
     }
 
     public function comprobarIgualdad($attribute, $params)
@@ -57,10 +76,18 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
-                $this->auth_key = Yii::$app->security
-                    ->generateRandomString();
-                $this->password = Yii::$app->security
-                    ->generatePasswordHash($this->password);
+                $this->auth_key = Yii::$app->security->generateRandomString();
+                if ($this->scenario === self::ESCENARIO_CREATE) {
+                    $this->password = Yii::$app->security->generatePasswordHash($this->password);
+                }
+            } else {
+                if ($this->scenario === self::ESCENARIO_UPDATE) {
+                    if ($this->password === '') {
+                        $this->password = $this->getOldAttribute('password');
+                    } else {
+                        $this->password = Yii::$app->security->generatePasswordHash($this->password);
+                    }
+                }
             }
             return true;
         }

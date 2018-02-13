@@ -17,6 +17,7 @@ class UsuariosRegistrarForm extends Model
             [['nombre', 'clave1', 'clave2', 'correo'], 'required'],
             [['correo'], 'email'],
             [['nombre'], 'comprobarUsuario'],
+            [['clave1'], 'comprobarClave'],
             [['clave2'], 'comprobarClave'],
         ];
     }
