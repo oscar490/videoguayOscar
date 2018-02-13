@@ -10,8 +10,8 @@ use app\models\Peliculas;
 use app\models\Socios;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,22 +35,22 @@ class AlquileresController extends Controller
                 ],
             ],
             'access' => [
-                'class'=>AccessControl::className(),
-                'only'=>['gestionar', 'index', 'alquilar'],
-                'rules'=> [
+                'class' => AccessControl::className(),
+                'only' => ['gestionar', 'index', 'alquilar'],
+                'rules' => [
                     [
-                        'allow'=>true,
-                        'actions'=>['gestionar'],
-                        'roles'=>['@'],
+                        'allow' => true,
+                        'actions' => ['gestionar'],
+                        'roles' => ['@'],
                     ],
                     [
-                        'allow'=>true,
-                        'actions'=>['index', 'alquilar'],
-                        'roles'=>['@'],
-                        'matchCallback'=> function ($rule, $action) {
+                        'allow' => true,
+                        'actions' => ['index', 'alquilar'],
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
                             return Yii::$app->user->identity->nombre === 'pepe';
-                        }
-                    ]
+                        },
+                    ],
                 ],
             ],
         ];

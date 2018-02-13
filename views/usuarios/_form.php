@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['id'=>'usuarios-form']); ?>
 
-    <?= $form->field($model, 'nombre',['enableAjaxValidation'=>true])->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
