@@ -15,6 +15,7 @@ use yii\web\IdentityInterface;
  */
 class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    public $passwordRepetir;
     /**
      * @inheritdoc
      */
@@ -31,8 +32,39 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['nombre', 'password'], 'required'],
             [['nombre', 'password', 'email'], 'string', 'max' => 255],
+            [['email'], 'email'],
             [['nombre'], 'unique'],
+            [['passwordRepetir'], 'comprobarIgualdad'],
         ];
+    }
+
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), [
+            'passwordRepetir',
+            'auth_key',
+        ]);
+    }
+
+    public function comprobarIgualdad($attribute, $params)
+    {
+        if ($this->password !== $this->passwordRepetir) {
+            $this->addError($attribute, 'Las contraseñas son diferentes.');
+        }
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->auth_key = Yii::$app->security
+                    ->generateRandomString();
+                $this->password = Yii::$app->security
+                    ->generatePasswordHash($this->password);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -43,8 +75,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             'id' => 'ID',
             'nombre' => 'Nombre',
-            'password' => 'Password',
+            'password' => 'Contraseña',
             'email' => 'Email',
+            'passwordRepetir' => 'Contrseña a repetir',
         ];
     }
 

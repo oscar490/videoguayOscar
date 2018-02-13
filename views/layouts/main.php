@@ -45,20 +45,33 @@ AppAsset::register($this);
             ['label'=> 'Alquileres', 'url' => ['/alquileres/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Registrarse', 'url' => ['/usuarios/create']],
+            [
+                'label'=>'Usuario',
+                'items'=>[
+                    Yii::$app->user->isGuest ? (
+                        ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
+                    ) : (
+                        '<li>'
+                        . Html::beginForm(['/site/logout'], 'post')
+                        . Html::submitButton(
+                            'Logout (' . Yii::$app->user->identity->nombre . ')',
+                            ['class' => 'btn btn-link logout']
+                        )
+                        . Html::endForm()
+                        . '</li>'
+                    ),
+                        Yii::$app->user->identity === null ? (
+                        ['label'=>'Registrarse', 'url' => ['usuarios/create']]
+                        ) : (
+                        ['label'=>'Perfil', 'url' => [
+                            'usuarios/view',
+                            'id'=>Yii::$app->user->identity->id
+                            ]]
+                        )
+                ]
+            ]
 
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Iniciar sesión', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->nombre . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+
         ],
     ]);
     NavBar::end();
