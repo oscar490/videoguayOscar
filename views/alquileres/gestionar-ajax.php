@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\Url;
 use yii\helpers\Html;
 
 use yii\widgets\ActiveForm;
@@ -6,6 +7,35 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
+$urlDatosAjax = Url::to(['socios/datos-ajax']);
+$js = <<<EOT
+    var form = $('#gestionar-peliculas-form');
+    form.on('afterValidateAttribute', function (event, attribute, messages) {
+        switch(attribute.name) {
+            case 'numero':
+                if (messages.length === 0) {
+                    $.ajax({
+                        url: '$urlDatosAjax',
+                        type: 'GET',
+                        data: {
+                            numero: form.yiiActiveForm('find', 'numero').value
+                        },
+                        success: function (data) {
+                            $('#socio').html(data);
+                        }
+                    });
+                } else {
+                    $('#socio').empty();
+                }
+                break;
+
+            case 'codigo':
+                //..
+                break;
+        }
+    })
+EOT;
+$this->registerJS($js);
 ?>
 
 <?php $form = ActiveForm::begin([
