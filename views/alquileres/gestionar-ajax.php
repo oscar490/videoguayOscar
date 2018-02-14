@@ -11,6 +11,14 @@ $js = <<<EOT
 function isEmpty(el) {
     return !$.trim(el.html());
 }
+
+function botonAlquilar() {
+    if (!isEmpty($('#socio')) && !isEmpty($('pelicula'))) {
+        $('#btn-alquilar').show();
+    } else {
+        $()
+    }
+}
 EOT;
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
