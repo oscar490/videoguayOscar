@@ -18,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 use yii\widgets\ActiveForm;
+use yii\widgets\DetailView;
 
 /**
  * AlquileresController implements the CRUD actions for Alquileres model.
@@ -56,6 +57,21 @@ class AlquileresController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionPendientes($numero)
+    {
+        $socio = Socios::findOne(['numero'=>$numero]);
+
+        if ($socio === null) {
+            return '';
+        }
+
+        $pendientes = $socio->getPendientes()->with('pelicula');
+
+        return $this->renderAjax('pendientes', [
+            'pendientes'=>$pendientes,
+        ]);
     }
 
     /**

@@ -1,13 +1,22 @@
 <?php
-use yii\helpers\Url;
+
 use yii\helpers\Html;
+use yii\helpers;
+use yii\helpers\Url;
+
 
 use yii\widgets\ActiveForm;
 
-
+$js = <<<EOT
+function isEmpty(el) {
+    return !$.trim(el.html());
+}
+EOT;
 $this->title = 'Gestión de Alquileres';
 $this->params['breadcrumbs'][] = $this->title;
 $urlDatosAjax = Url::to(['socios/datos-ajax']);
+$urlPeliculasAjax = Url::to(['peliculas/datos-ajax']);
+$urlAlquileresPendientes = Url::to(['alquileres/pendientes']);
 $js = <<<EOT
     var form = $('#gestionar-peliculas-form');
     form.on('afterValidateAttribute', function (event, attribute, messages) {
@@ -24,13 +33,36 @@ $js = <<<EOT
                             $('#socio').html(data);
                         }
                     });
+                    $.ajax({
+                        url: '$urlAlquileresPendientes',
+                        type: 'GET',
+                        data: {
+                            numero: form.yiiActiveForm('find', 'numero').value
+                        },
+                        success: function (data) {
+                            $('#pendientes').html(data);
+                        }
+                    });
                 } else {
                     $('#socio').empty();
                 }
                 break;
 
             case 'codigo':
-                //..
+                if (messages.length === 0) {
+                    $.ajax({
+                        url: '$urlPeliculasAjax',
+                        type: 'GET',
+                        data: {
+                            codigo: form.yiiActiveForm('find', 'codigo').value
+                        },
+                        success: function (data) {
+                            $('#pelicula').html(data);
+                        }
+                    });
+                } else {
+                    $('#pelicula').empty();
+                }
                 break;
         }
     })
@@ -43,16 +75,20 @@ $this->registerJS($js);
     'method'=>'get',
     'action'=>['alquileres/gestionar-ajax'],
 ]) ?>
-    <?= $form->field(
-        $gestionarPeliculasForm,
-        'codigo',
-        ['enableAjaxValidation'=>true]
-    ) ?>
+
     <?= $form->field(
         $gestionarPeliculasForm,
         'numero',
         ['enableAjaxValidation'=>true]
     ) ?>
+    <div id='socio'>
+    </div>
+    <?= $form->field(
+        $gestionarPeliculasForm,
+        'codigo',
+        ['enableAjaxValidation'=>true]
+    ) ?>
+
 <?php ActiveForm::end() ?>
 
 <?php $form = ActiveForm::begin([
@@ -72,8 +108,7 @@ $this->registerJS($js);
 
 
 <?php ActiveForm::end() ?>
-    <div id='socio'>
-    </div>
+
 
     <div id='pelicula'>
     </div>

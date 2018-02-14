@@ -36,6 +36,23 @@ class PeliculasController extends Controller
         ];
     }
 
+    public function actionDatosAjax($codigo)
+    {
+        $pelicula = Peliculas::findOne(['codigo'=>$codigo]);
+
+        if ($codigo === null) {
+            return '';
+        }
+
+        return DetailView::widget([
+            'model'=>$pelicula,
+            'attributes'=> [
+                'titulo',
+                'precio_alq',
+            ],
+        ]);
+    }
+
     /**
      * Muestra un listado paginado de películas.
      * @return mixed
