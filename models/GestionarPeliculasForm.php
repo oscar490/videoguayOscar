@@ -7,11 +7,12 @@ use yii\base\Model;
 class GestionarPeliculasForm extends Model
 {
     public $codigo;
+    public $numero;
 
     public function rules()
     {
         return [
-            [['codigo'], 'required'],
+            [['codigo', 'numero'], 'required'],
             [['codigo'], 'buscarPelicula'],
             [
                 ['codigo'],
@@ -19,6 +20,13 @@ class GestionarPeliculasForm extends Model
                 'skipOnError' => true,
                 'targetClass' => Peliculas::className(),
                 'targetAttribute' => ['codigo' => 'codigo'],
+            ],
+            [
+                ['numero'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Socios::className(),
+                'targetAttribute' => ['numero' => 'numero'],
             ],
         ];
     }

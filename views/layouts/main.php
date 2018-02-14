@@ -43,6 +43,8 @@ AppAsset::register($this);
         ['label'=> 'Alquileres', 'url' => ['/alquileres/index']],
         ['label' => 'About', 'url' => ['/site/about']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
+        ['label' => 'Ajax', 'url' => ['alquileres/gestionar-ajax']],
+
     ];
 
     if (Yii::$app->user->isGuest) {

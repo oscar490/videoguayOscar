@@ -17,6 +17,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
+use yii\widgets\ActiveForm;
+
 /**
  * AlquileresController implements the CRUD actions for Alquileres model.
  */
@@ -105,6 +107,23 @@ class AlquileresController extends Controller
         $data['modeloPeliculas'] = $modeloPeliculas;
 
         return $this->render('gestionar', $data);
+    }
+
+    public function actionGestionarAjax($numero = null, $codigo = null)
+    {
+        $gestionarPeliculasForm = new GestionarPeliculasForm([
+            'codigo'=>$codigo,
+            'numero'=>$numero,
+        ]);
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return  ActiveForm::validate($gestionarPeliculasForm);
+        }
+
+        return $this->render('gestionar-ajax', [
+            'gestionarPeliculasForm'=>$gestionarPeliculasForm
+        ]);
     }
     /**
      * Devuelve un alquiler indicado por el id pasado por post.
