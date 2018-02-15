@@ -175,6 +175,22 @@ class AlquileresController extends Controller
         ]);
     }
 
+    public function actionPendientes($numero)
+    {
+        $socio = Socios::findOne(['numero' => $numero]);
+
+        if ($socio === null) {
+            return '';
+        }
+
+        $pendientes = Alquileres::find()
+            ->where(['socio_id' => $socio->id, 'devolucion' => null]);
+
+        return $this->renderAjax('pendientes', [
+            'pendientes' => $pendientes,
+        ]);
+    }
+
 
 
     public function actionListado()

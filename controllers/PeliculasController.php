@@ -49,7 +49,7 @@ class PeliculasController extends Controller
             'model' => $pelicula,
             'attributes' => [
                 'titulo',
-                'precio_alq',
+                'precio_alq:currency',
             ],
         ]);
     }
