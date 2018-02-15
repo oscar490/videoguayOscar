@@ -69,25 +69,23 @@ class AlquileresController extends Controller
             'numero' => $numero,
         ]);
 
+
+
         if (Yii::$app->request->isAjax && $modeloSocios->load(Yii::$app->request->get())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($modeloSocios);
         }
+
+        $modeloPeliculas = new GestionarPeliculasForm([
+            'codigo' => $codigo,
+            'numero' => $numero,
+        ]);
 
         $searchModel = new AlquileresSearch();
 
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
-            $modeloPeliculas = new GestionarPeliculasForm([
-                'codigo' => $codigo,
-            ]);
-
-            // if (Yii::$app->request->isAjax && $modeloPeliculas->load(Yii::$app->request->get())) {
-            //     Yii::$app->response->format = Response::FORMAT_JSON;
-            //     return ActiveForm::validate($modeloPeliculas);
-            // }
-            $data['modeloPeliculas'] = $modeloPeliculas;
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
 
             $data['dataProvider'] = $searchModel->search(Yii::$app->request->get(), $modeloSocios->numero);
@@ -100,7 +98,7 @@ class AlquileresController extends Controller
 
             $data['searchModel'] = $searchModel;
 
-            if ($codigo != null && $modeloPeliculas->validate()) {
+            if ($codigo !== null && $modeloPeliculas->validate()) {
                 $data['pelicula'] = Peliculas::findOne([
                     'codigo' => $modeloPeliculas->codigo,
                 ]);
@@ -113,9 +111,14 @@ class AlquileresController extends Controller
         );
 
         $data['modeloSocios'] = $modeloSocios;
+        $data['modeloPeliculas'] = $modeloPeliculas;
 
 
         return $this->render('gestionar', $data);
+    }
+
+    public function actionPendientes($numero)
+    {
     }
 
     public function actionGestionarAjax($numero = null, $codigo = null)

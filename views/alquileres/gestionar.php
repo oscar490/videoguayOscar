@@ -78,11 +78,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $form = ActiveForm::begin([
         'method' => 'get',
         'action' => ['alquileres/gestionar'],
-        'id'=>'gestionar-peliculas',
-        'enableAjaxValidation'=>true,
+
         ]) ?>
 
-        <?= $form->field($modeloPeliculas, 'codigo', ['enableAjaxValidation'=>true]) ?>
+        <?= $form->field($modeloPeliculas, 'codigo') ?>
         <?= Html::hiddenInput('numero', $modeloSocios->numero) ?>
         <div class='form-group'>
             <?= Html::submitButton('Buscar película', ['class'=>'btn btn-primary']) ?>
