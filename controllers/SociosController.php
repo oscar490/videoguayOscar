@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\widgets\DetailView;
 
 /**
  * SociosController implements the CRUD actions for Socios model.
@@ -44,6 +45,23 @@ class SociosController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionDatosAjax($numero)
+    {
+        $socio = Socios::findOne(['numero' => $numero]);
+
+        if ($socio === null) {
+            return '';
+        }
+
+        return DetailView::widget([
+            'model' => $socio,
+            'attributes' => [
+                'nombre',
+                'telefono',
+            ],
         ]);
     }
 

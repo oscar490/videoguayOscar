@@ -16,6 +16,7 @@ use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * AlquileresController implements the CRUD actions for Alquileres model.
@@ -68,15 +69,25 @@ class AlquileresController extends Controller
             'numero' => $numero,
         ]);
 
-        $modeloPeliculas = new GestionarPeliculasForm([
-            'codigo' => $codigo,
-        ]);
+        if (Yii::$app->request->isAjax && $modeloSocios->load(Yii::$app->request->get())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($modeloSocios);
+        }
 
         $searchModel = new AlquileresSearch();
 
         $data = [];
 
         if ($numero !== null && $modeloSocios->validate()) {
+            $modeloPeliculas = new GestionarPeliculasForm([
+                'codigo' => $codigo,
+            ]);
+
+            // if (Yii::$app->request->isAjax && $modeloPeliculas->load(Yii::$app->request->get())) {
+            //     Yii::$app->response->format = Response::FORMAT_JSON;
+            //     return ActiveForm::validate($modeloPeliculas);
+            // }
+            $data['modeloPeliculas'] = $modeloPeliculas;
             $data['socio'] = Socios::findOne(['numero' => $modeloSocios->numero]);
 
             $data['dataProvider'] = $searchModel->search(Yii::$app->request->get(), $modeloSocios->numero);
@@ -102,9 +113,26 @@ class AlquileresController extends Controller
         );
 
         $data['modeloSocios'] = $modeloSocios;
-        $data['modeloPeliculas'] = $modeloPeliculas;
+
 
         return $this->render('gestionar', $data);
+    }
+
+    public function actionGestionarAjax($numero = null, $codigo = null)
+    {
+        $gestionarPeliculasForm = new GestionarPeliculasForm([
+            'numero' => $numero,
+            'codigo' => $codigo,
+        ]);
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($gestionarPeliculasForm);
+        }
+
+        return $this->render('gestionar-ajax', [
+            'gestionarPeliculasForm' => $gestionarPeliculasForm,
+        ]);
     }
     /**
      * Devuelve un alquiler indicado por el id pasado por post.
