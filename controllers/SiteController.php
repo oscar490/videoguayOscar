@@ -57,6 +57,19 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionEmail()
+    {
+        $envio = Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setTo('dwesoscar@gmail.com')
+            ->setSubject('Message subject')
+            ->setTextBody('Esto es un mensaje de prueba')
+            // ->setHtmlBody('<b>HTML content</b>')
+            ->send();
+
+            return $envio;
+    }
+
     /**
      * Displays homepage.
      *

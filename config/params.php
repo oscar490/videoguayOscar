@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'dwesoscar@gmail.com',
 
     'dateFormat' => 'php:d-m-Y',
     'timeFormat' => 'php:H:i:s',
