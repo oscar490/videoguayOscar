@@ -12,6 +12,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm' => '@vendor/npm-asset',
+        '@uploads' => '@app/web/uploads',
     ],
     'language' => 'es-ES',
     'container' => [
@@ -65,7 +66,6 @@ $config = [
                 'port' => '587',
                 'encryption' => 'tls',
             ],
-
         ],
         'log' => $log,
         'db' => $db,
@@ -74,11 +74,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'socios/view/<id:\d+>'=>'socios/view',
-                'socios/update/<id:\d+>'=>'socios/update',
+                'socios/view/<id:\d+>' => 'socios/view',
+                'socios/update/<id:\d+>' => 'socios/update',
             ],
         ],
-
     ],
     'params' => $params,
     'modules' => [

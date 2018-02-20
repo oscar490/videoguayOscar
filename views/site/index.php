@@ -14,7 +14,7 @@ $this->title = 'VideoGuay';
 
         <p >Disfruta de nuestras novedades.</p>
 
-        <p><a class="btn btn-lg btn-success" href="?r=peliculas/create">Añadir una nueva película</a></p>
+        <p><a class="btn btn-lg btn-success" href="/peliculas/create">Añadir una nueva película</a></p>
     </div>
 
     <div class="body-content">

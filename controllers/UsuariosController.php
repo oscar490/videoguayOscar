@@ -3,12 +3,13 @@
 namespace app\controllers;
 
 use app\models\Usuarios;
-use app\models\UsuariosSearch;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -47,11 +48,13 @@ class UsuariosController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new UsuariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Usuarios::find(),
+            'pagination' => false,
+            'sort' => false,
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -78,8 +81,13 @@ class UsuariosController extends Controller
     {
         $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->goHome();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->foto = UploadedFile::getInstance($model, 'foto');
+
+            if ($model->save() && $model->upload()) {
+                return $this->goHome();
+            }
         }
 
         return $this->render('create', [
