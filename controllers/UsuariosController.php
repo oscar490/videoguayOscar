@@ -7,9 +7,9 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\UploadedFile;
 
 /**
  * UsuariosController implements the CRUD actions for Usuarios model.
@@ -81,18 +81,33 @@ class UsuariosController extends Controller
     {
         $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
-
         if ($model->load(Yii::$app->request->post())) {
-            $model->foto = UploadedFile::getInstance($model, 'foto');
+            $model->save();
+            Yii::$app->mailer->compose()
+                ->setFrom('dwesoscar@gmail.com')
+                ->setTo($model->email)
+                ->setSubject('Registro de usuario')
+                ->setHtmlBody(Url::to("usuarios/validar-correo/token$model->token_val", true))
+                ->send();
 
-            if ($model->save() && $model->upload()) {
-                return $this->goHome();
-            }
+            return $this->goHome();
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionValidarCorreo($token = null)
+    {
+        $usuario = Usuarios::findOne(['token_val' => $token]);
+
+        if ($usuario !== null) {
+            $usuario->token_val = null;
+            $usuario->save();
+        }
+
+        return $this->goHome();
     }
 
     /**
