@@ -6,6 +6,7 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\Peliculas;
 use app\models\PeliculasSearch;
+use Spatie\Dropbox\Exceptions\BadRequest;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -67,7 +68,7 @@ class SiteController extends Controller
             // ->setHtmlBody('<b>HTML content</b>')
             ->send();
 
-            return $envio;
+        return $envio;
     }
 
     /**
@@ -87,6 +88,27 @@ class SiteController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    public function actionDropbox()
+    {
+        $cliente = new \Spatie\Dropbox\Client(getenv('DROPBOX_TOKEN'));
+        try {
+            $cliente->delete('5.png');
+        } catch (BadRequest $e) {
+        }
+
+        $cliente->upload(
+            '5.png',
+            file_get_contents(Yii::getAlias('@uploads/5.png')),
+            'overwrite'
+        );
+
+        $res = $cliente->createSharedLinkWithSettings(
+            '5.png',
+            ['requested_visibility' => 'public']
+        );
+        echo $res['url'];
     }
 
     /**

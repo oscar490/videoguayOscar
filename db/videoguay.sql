@@ -6,11 +6,13 @@ DROP TABLE IF EXISTS usuarios CASCADE;
 
 CREATE TABLE usuarios
 (
-      id       BIGSERIAL PRIMARY KEY
-    , nombre   VARCHAR(255) NOT NULL UNIQUE
-    , password VARCHAR(255) NOT NULL
-    , email    VARCHAR(255)
-    , auth_key VARCHAR(255)
+      id         BIGSERIAL    PRIMARY KEY
+    , nombre     VARCHAR(255) NOT NULL UNIQUE
+    , password   VARCHAR(255) NOT NULL
+    , email      VARCHAR(255) NOT NULL
+    , auth_key   VARCHAR(255)
+    , token_val  VARCHAR(255) UNIQUE
+    , created_at TIMESTAMP(0) NOT NULL DEFAULT localtimestamp
 );
 
 CREATE INDEX idx_usurios_email ON usuarios (email);
@@ -53,7 +55,7 @@ CREATE TABLE alquileres
                              ON DELETE NO ACTION ON UPDATE CASCADE
   , pelicula_id BIGINT       NOT NULL REFERENCES peliculas (id)
                              ON DELETE NO ACTION ON UPDATE CASCADE
-  , create_at   TIMESTAMP(0) NOT NULL DEFAULT current_timestamp
+  , create_at   TIMESTAMP(0) NOT NULL DEFAULT localtimestamp
   , devolucion  TIMESTAMP(0)
   , UNIQUE (socio_id, pelicula_id, create_at)
 
@@ -74,10 +76,10 @@ INSERT INTO peliculas (codigo, titulo, precio_alq)
             (3000, 'El ataque de los clones', 3);
 
 INSERT INTO alquileres (socio_id, pelicula_id, create_at, devolucion)
-    VALUES  (1, 1, current_timestamp - 'P4D'::interval, current_timestamp - 'P3D'::interval),
-            (1, 2, current_timestamp - 'P2D'::interval, null),
-            (1, 3, current_timestamp - 'P1D'::interval, current_timestamp),
-            (3, 1, current_timestamp - 'P3D'::interval, current_timestamp - 'P1D'::interval);
+    VALUES  (1, 1, localtimestamp - 'P4D'::interval, localtimestamp - 'P3D'::interval),
+            (1, 2, localtimestamp - 'P2D'::interval, null),
+            (1, 3, localtimestamp - 'P1D'::interval, localtimestamp),
+            (3, 1, localtimestamp - 'P3D'::interval, localtimestamp - 'P1D'::interval);
 
 
 INSERT INTO usuarios (nombre, password, email)
