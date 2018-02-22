@@ -6,6 +6,7 @@ use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\Peliculas;
 use app\models\PeliculasSearch;
+use Spatie\Dropbox\Exceptions\BadRequest;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -57,6 +58,19 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionEmail()
+    {
+        $envio = Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setTo('dwesoscar@gmail.com')
+            ->setSubject('Message subject')
+            ->setTextBody('Esto es un mensaje de prueba')
+            // ->setHtmlBody('<b>HTML content</b>')
+            ->send();
+
+        return $envio;
+    }
+
     /**
      * Displays homepage.
      *
@@ -74,6 +88,27 @@ class SiteController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    public function actionDropbox()
+    {
+        $cliente = new \Spatie\Dropbox\Client(getenv('DROPBOX_TOKEN'));
+        try {
+            $cliente->delete('5.png');
+        } catch (BadRequest $e) {
+        }
+
+        $cliente->upload(
+            '5.png',
+            file_get_contents(Yii::getAlias('@uploads/5.png')),
+            'overwrite'
+        );
+
+        $res = $cliente->createSharedLinkWithSettings(
+            '5.png',
+            ['requested_visibility' => 'public']
+        );
+        echo $res['url'];
     }
 
     /**

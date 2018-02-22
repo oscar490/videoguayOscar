@@ -1,14 +1,15 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Usuarios */
 
-$this->title = $model->nombre;
-// $this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Perfil';
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="usuarios-view">
 
@@ -28,10 +29,16 @@ $this->params['breadcrumbs'][] = 'Perfil';
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'id',
             'nombre',
             'password',
             'email:email',
             'auth_key',
+            [
+                'attribute'=>'foto',
+                'value'=> Url::to('/uploads/') . $model->id . '.png',   
+                'format'=>'image',
+            ]
         ],
     ]) ?>
 

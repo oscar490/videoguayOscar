@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Url;
 use yii\helpers\Html;
 
@@ -9,6 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $urlSociosDatos = Url::to(['socios/datos-ajax']);
 $urlPeliculasDatos = Url::to(['peliculas/datos-ajax']);
+$urlAlquileresDatos = Url::to(['alquileres/pendientes']);
 $js = <<<EOT
     var form = $('#gestionar-peliculas');
     form.on('afterValidateAttribute', function (event, attribute, messages) {
@@ -24,9 +26,21 @@ $js = <<<EOT
                         success: function (data) {
                             $('#socio').html(data);
                         }
-                    })
+                    });
+                    $.ajax({
+                        url: '$urlAlquileresDatos',
+                        type: 'GET',
+                        data: {
+                            numero: form.yiiActiveForm('find', 'numero').value
+                        },
+                        success: function (data) {
+                            $('#alquileres').html(data);
+                            
+                        }
+                    });
                 } else {
                     $('#socio').empty();
+                    $('#alquileres').empty();
                 }
                 break;
 
@@ -65,6 +79,8 @@ $this->registerJs($js);
         ) ?>
 
     <div id='socio'>
+    </div>
+    <div id='alquileres'>
     </div>
     <?= $form->field(
         $gestionarPeliculasForm,

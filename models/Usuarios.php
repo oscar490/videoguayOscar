@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\imagine\Image;
 use yii\web\IdentityInterface;
 
 /**
@@ -19,6 +20,12 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     const ESCENARIO_UPDATE = 'update';
 
     public $passwordRepetir;
+
+    /**
+     * Contiene la foto subida en el formulario.
+     * @var UploadedFile
+     */
+    public $foto;
     /**
      * @inheritdoc
      */
@@ -46,14 +53,43 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
                 'skipOnEmpty' => false,
                 'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
             ],
+            [['foto'], 'file', 'extensions' => 'jpg, png'],
         ];
+    }
+
+
+    /**
+     * Displays a single Usuarios model.
+     * @param int $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function upload()
+    {
+        $nombre = Yii::getAlias('@uploads/') . $this->id . '.png';
+        $res = $this->foto->saveAs(
+            Yii::getAlias('@uploads/') . $this->id . '.png'
+        );
+
+        if ($res) {
+            Image::thumbnail($nombre, 80, null)->save($nombre);
+        }
+
+        return $res;
     }
 
     public function attributes()
     {
         return array_merge(parent::attributes(), [
             'passwordRepetir',
-            'auth_key',
+            'foto',
         ]);
     }
 
@@ -77,6 +113,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 $this->auth_key = Yii::$app->security->generateRandomString();
+                $this->token_val = Yii::$app->security->generateRandomString();
                 if ($this->scenario === self::ESCENARIO_CREATE) {
                     $this->password = Yii::$app->security->generatePasswordHash($this->password);
                 }
