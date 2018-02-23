@@ -9,6 +9,13 @@ $this->title = 'VideoGuay';
 ?>
 <div class="site-index">
 
+    <?php if (Yii::$app->session->has('mensaje')): ?>
+        <div class="alert alert-success" role="alert">
+            <?= Yii::$app->session->get('mensaje') ?>
+            <?php Yii::$app->session->remove('mensaje') ?>
+        </div>
+    <?php endif; ?>
+
     <div class="jumbotron">
         <h1>¡Bienvenidos al mundo del cine!</h1>
 

@@ -82,15 +82,17 @@ class UsuariosController extends Controller
         $model = new Usuarios(['scenario' => Usuarios::ESCENARIO_CREATE]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->save();
-            Yii::$app->mailer->compose()
-                ->setFrom('dwesoscar@gmail.com')
-                ->setTo($model->email)
-                ->setSubject('Registro de usuario')
-                ->setHtmlBody(Url::to("usuarios/validar-correo/token$model->token_val", true))
-                ->send();
+            if ($model->save()) {
+                Yii::$app->session->set('mensaje', 'Se ha enviado un correo electrónico a la dirección indicada');
 
-            return $this->goHome();
+                Yii::$app->mailer->compose()
+                    ->setFrom('dwesoscar@gmail.com')
+                    ->setTo($model->email)
+                    ->setSubject('Registro de usuario')
+                    ->setHtmlBody(Url::to("usuarios/validar?token=$model->token_val", true))
+                    ->send();
+                return $this->goHome();
+            }
         }
 
         return $this->render('create', [
@@ -98,16 +100,16 @@ class UsuariosController extends Controller
         ]);
     }
 
-    public function actionValidarCorreo($token = null)
+    public function actionValidar($token = null)
     {
         $usuario = Usuarios::findOne(['token_val' => $token]);
 
         if ($usuario !== null) {
             $usuario->token_val = null;
             $usuario->save();
-        }
 
-        return $this->goHome();
+            $this->redirect(['site/login']);
+        }
     }
 
     /**

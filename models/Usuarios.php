@@ -53,6 +53,11 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
                 'skipOnEmpty' => false,
                 'on' => [self::ESCENARIO_CREATE, self::ESCENARIO_UPDATE],
             ],
+            [['token_val'], function ($attribute, $params, $validator) {
+                if ($this->token_val !== null) {
+                    $this->addError($attribute, 'No tiene la cuenta activada.');
+                }
+            }],
             [['foto'], 'file', 'extensions' => 'jpg, png'],
         ];
     }
@@ -93,13 +98,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         ]);
     }
 
-    public function scenarios()
-    {
-        return [
-            self::ESCENARIO_CREATE => ['nombre', 'passwordRepetir', 'password', 'email'],
-            self::ESCENARIO_UPDATE => ['nombre', 'passwordRepetir', 'password', 'email'],
-        ];
-    }
+
 
     public function comprobarIgualdad($attribute, $params)
     {

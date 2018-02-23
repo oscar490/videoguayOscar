@@ -31,6 +31,13 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['username', function ($attribute, $params, $validator) {
+                $usuario = Usuarios::findOne(['nombre' => $this->$attribute]);
+
+                if ($usuario->token_val !== null) {
+                    $this->addError($attribute, 'No tiene la cuenta activada');
+                }
+            }],
         ];
     }
 
