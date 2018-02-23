@@ -117,9 +117,7 @@ class AlquileresController extends Controller
         return $this->render('gestionar', $data);
     }
 
-    public function actionPendientes($numero)
-    {
-    }
+
 
     public function actionGestionarAjax($numero = null, $codigo = null)
     {
