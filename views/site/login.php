@@ -10,6 +10,14 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Inicio de sesión';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php if (Yii::$app->session->has('mensaje')): ?>
+    <div class="alert alert-success" role="alert">
+        <?= Yii::$app->session->get('mensaje') ?>
+        <?php Yii::$app->session->remove('mensaje') ?>
+    </div>
+<?php endif; ?>
+
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 

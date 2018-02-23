@@ -108,6 +108,7 @@ class UsuariosController extends Controller
             $usuario->token_val = null;
             $usuario->save();
 
+            Yii::$app->session->set('mensaje', 'Ya tiene la cuenta correctamente activada.');
             $this->redirect(['site/login']);
         }
     }
